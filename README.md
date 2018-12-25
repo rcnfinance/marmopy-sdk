@@ -1,6 +1,4 @@
 # Marmopy-sdk
-[![CircleCI](https://circleci.com/gh/ripio/marmopy-sdk.svg?style=shield)](https://circleci.com/gh/ripio/marmopy-sdk)
-
 
 # Description
 Marmopy-sdk helps python developers to consume Marmo Relayer.
