@@ -44,7 +44,7 @@ class Intent:
         dependencies = "".join(map(remove_0x_prefix,self.dependencies))                      
         encodedPackedBuilder.append(keccak256("0x"+dependencies if dependencies!="" else dependencies))             
         encodedPackedBuilder.append(remove_0x_prefix(self.to))                 
-        encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(0))              
+        encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.value))              
         encodedPackedBuilder.append(keccak256(self.data))
         encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.minGasLimit))
         encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.maxGasPrice))
