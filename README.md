@@ -139,7 +139,8 @@ requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json
 
 # Run Tests
 
-install nose -> pip install nose
-run:
+First install nose -> pip install nose
+Then run:
+
 ```shell
  nosetests tests/*
