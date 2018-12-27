@@ -113,7 +113,7 @@ intent = Intent(intentAction=intentAction, signer=credentials.getAddress(), wall
 
 ### Sign a intent
 ```python
-signedIntent = Intent.signIntent(intent,credentials);
+signedIntent = intent.sign(credentials);
 ```
 
 ###  Send a intent
