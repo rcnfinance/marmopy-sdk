@@ -19,21 +19,22 @@ class IntentAction:
         
         self.abi['type'] = "function"
         
-    def __call__(self,*args):
-        
-        instance, arguments = args[0], args[1:]
+    def __call__(self,instance, *args, **kwargs):
         
         for attr,value in instance.__dict__.items(): setattr(self,attr,value)
     
         data = encode_hex(function_abi_to_4byte_selector(self.abi))
         
-        self.encoded = encode_abi(web3,self.abi,arguments,data)
+        self.encoded = encode_abi(web3,self.abi,args,data)
         
-        self.arguments = dict(zip([arg['name'] for arg in self.abi['inputs']],arguments))
+        self.arguments = dict(zip([arg['name'] for arg in self.abi['inputs']],args))
+        
+        self.value = 0
         
         return self
     
-    def __get__(self,instance,_):           
+    def __get__(self,instance,_):
+         """Support instance methods."""
         return partial(self.__call__, instance)
     
     def __repr__(self):
