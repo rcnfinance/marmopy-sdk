@@ -8,7 +8,7 @@ class Intent:
     
     def __init__(self,intentAction, signer, wallet,dependencies=list(), salt=SALT, maxGasPrice=MAX_GAS_PRICE, minGasLimit=MIN_GAS_PRICE):
         self.to = intentAction.contractAddress
-        self.value = 0
+        self.value = intentAction.value
         self.data = intentAction.encoded
         self.dependencies = dependencies
         self.signer = signer
@@ -53,8 +53,13 @@ class Intent:
         
         return "0x"+keccak256(encodedPackedBuilder)
     
-    @classmethod
-    def signIntent(cls,intent,credentials):
-        results = intent.__dict__
-        results["signature"] = credentials.signHash(intent.id)
+    def sign(self,credentials):
+        results = self.__dict__.copy()
+        results["tx"] = {}
+        for tx_key in ["to","value","data","minGasLimit","maxGasPrice"]:
+            results["tx"][tx_key] = results.pop(tx_key)
+            
+        results["signature"] = credentials.signHash(self.id)
+        
         return results
+    
