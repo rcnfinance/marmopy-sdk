@@ -38,10 +38,11 @@ Marmo relayer: (https://github.com/ripio/marmo-relayer).
 ##### Prerequisites
 * Python2 or Python3
 
-Clone the repository and then run:
+Pip install from git url:
 
-pip install .
-
+```shell
+pip install git+https://github.com/majd1239/marmopy-sdk
+```
 
 ### Intent Flowchart
 ![](./images/02.png)
@@ -144,3 +145,4 @@ Then run:
 
 ```shell
  nosetests tests/*
+ ```
