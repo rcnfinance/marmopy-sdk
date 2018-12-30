@@ -36,7 +36,7 @@ Marmo relayer: (https://github.com/ripio/marmo-relayer).
 # Getting started
 
 ##### Prerequisites
-* Python3
+* Python2 or Python3
 
 Clone the repository and then run:
 
@@ -88,7 +88,7 @@ class Contract:
         self.contractAddress = contractAddress
         
     @IntentAction
-    def transfer(self, to:'address', value:'uint256') -> 'bool': pass
+    def transfer(self, to='address', value='uint256') : return 'bool'
     
     
 tokenContractAddress = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN

@@ -1,7 +1,7 @@
 from marmopy.utils import keccak256,toHexStringNoPrefixZeroPadded,remove_0x_prefix
 from eth_utils import is_address
 
-class Intent:
+class Intent(object):
     MAX_GAS_PRICE = 9999999999
     MIN_GAS_PRICE = 0
     SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -24,11 +24,11 @@ class Intent:
         
     def __setattr__(self, name, value):
         if len(self.__dict__)<10:
-            super().__setattr__(name, value)
+            super(Intent,self).__setattr__(name, value)
         else:
             if name in self.__dict__.keys():
-                super().__setattr__(name, value)
-                super().__setattr__("id", self._generateId())
+                super(Intent,self).__setattr__(name, value)
+                super(Intent,self).__setattr__("id", self._generateId())
             else:
                 raise Exception("Adding new variables not allowed.")
             
@@ -42,7 +42,7 @@ class Intent:
         
         encodedPackedBuilder.append(self.wallet)
         dependencies = "".join(map(remove_0x_prefix,self.dependencies))                      
-        encodedPackedBuilder.append(keccak256("0x"+dependencies if dependencies!="" else dependencies))             
+        encodedPackedBuilder.append(keccak256(dependencies))             
         encodedPackedBuilder.append(remove_0x_prefix(self.to))                 
         encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.value))              
         encodedPackedBuilder.append(keccak256(self.data))
