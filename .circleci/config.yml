@@ -5,34 +5,10 @@ jobs:
     docker:
       - image: alpine/git:latest
     steps:
-      - checkout
       - persist_to_workspace:
           root: ~/
           paths:
             - ./repo
-
-  dependencies:
-    docker:
-      - image: circleci/python:3.6.4
-    working_directory: ~/repo
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
-      - restore_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run:
-          command: |
-            sudo pip install pipenv
-            pipenv install .
-            pipenv install nose
-      - save_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-          paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.6/site-packages"
 
   unit-test:
     working_directory: ~/repo
@@ -41,7 +17,11 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: sudo apt install python-nose
+      - run:
+          command: |
+            sudo pip install pipenv
+            pipenv install .
+            pipenv install nose
       - run: nosetests tests/*
             
             
@@ -50,9 +30,6 @@ workflows:
   build-test-deploy:
     jobs:
       - checkout
-      - dependencies:
-          requires:
-            - checkout
       - unit-test:
           requires:
-            - dependencies
+            - checkout
