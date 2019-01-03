@@ -25,6 +25,7 @@ jobs:
       - run:
           command: |
             sudo pip install pipenv
+            sudo pip install pycodestyle
             pipenv install .
             pipenv install nose
       - save_cache:
@@ -43,6 +44,14 @@ jobs:
           at: ~/
       - run: nosetests tests/*
             
+  pep8:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.6.4
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: pycodestyle .
             
 workflows:
   version: 2
@@ -53,5 +62,8 @@ workflows:
           requires:
             - checkout
       - unit-test:
+          requires:
+            - dependencies
+      - pep8:
           requires:
             - dependencies
