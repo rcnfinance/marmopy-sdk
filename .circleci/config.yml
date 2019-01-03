@@ -41,6 +41,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: sudo apt install python-nose
       - run: nosetests tests/*
             
             
