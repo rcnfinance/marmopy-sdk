@@ -12,6 +12,7 @@ jobs:
             - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v3-{{ .Branch }}-
             - pip-packages-v3-
+      - run: sudo apt-get install python-dev
       - run: pipenv install . --dev
       - save_cache:
           paths:
