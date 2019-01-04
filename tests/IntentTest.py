@@ -20,7 +20,7 @@ class IntentTests(unittest.TestCase):
 
         contractAddress = "0xDc3914BEd4Fc2E387d0388B2E3868e671c143944"
 
-        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress)
+        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress, expiration=15)
 
         self.assertEqual(intent.id, "0x7935c8f49cb284e1c5c8dd95b3fc6c9cad6519a17555a5f2e43f9aaa31d25a37")
         
@@ -29,14 +29,14 @@ class IntentTests(unittest.TestCase):
         
         contractAddress = "0xbbf289d846208c16edc8474705c748aff07732db"
         
-        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress)
+        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress, expiration=15)
         
         self.assertEqual(intent.id, "0x0dd96a883c69dca2fef7de903ed543b2751919592a799902aa84ce7ed6a23479")
         
     def testBalanceoffWithWalletGeneration(self):
         intentAction = self.erc20.balanceOf(self.to)
         
-        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress())
+        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), expiration=15)
         
         self.assertEqual(intent.wallet,'0x58afa2965bb771b88196d07385f2d33fa3c3799e')
         
@@ -49,7 +49,7 @@ class IntentTests(unittest.TestCase):
         
         dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f536e"]
         
-        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress, dependencies=dependencies)
+        intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress, dependencies=dependencies, expiration=15)
         
         self.assertEqual(intent.id, "0x5de183da65683636ad564c80559c6cf68d5c738239f15da75e5a020d039cf7fb")
         
@@ -70,7 +70,7 @@ class IntentTests(unittest.TestCase):
                         "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
        
         intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress,
-                        dependencies=dependencies, maxGasPrice=999999, minGasLimit=300000)
+                        dependencies=dependencies, maxGasPrice=999999, minGasLimit=300000, expiration=15)
         
         self.assertEqual(intent.id,"0x40b7b0871f7b3e25020766c21545be0ef33349a949b6f4b9548387d4d539a110")
         
@@ -87,7 +87,7 @@ class IntentTests(unittest.TestCase):
         salt = "0x0000000000000000000000000000000000000000000000000000000000000001"
         
         intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress,
-                        dependencies=dependencies,salt=salt, maxGasPrice=999999, minGasLimit=300000)
+                        dependencies=dependencies,salt=salt, maxGasPrice=999999, minGasLimit=300000, expiration=15)
         
         self.assertEqual(intent.id, "0x63bfa4961085e360ff2507256aae202ef05fe1883475eb21456796b81f5a0e58")
         
@@ -125,7 +125,7 @@ class IntentTests(unittest.TestCase):
         salt = "0x0000000000000000000000000000000000000000000000000000000000000001"
         
         intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), wallet=contractAddress,
-                        dependencies=dependencies,salt=salt, maxGasPrice=999999, minGasLimit=300000)
+                        dependencies=dependencies,salt=salt, maxGasPrice=999999, minGasLimit=300000, expiration=15)
         
         signedIntent = intent.sign(self.credentials)
         

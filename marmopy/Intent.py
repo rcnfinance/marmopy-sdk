@@ -1,6 +1,6 @@
 from marmopy.utils import keccak256,toHexStringNoPrefixZeroPadded,remove_0x_prefix
 from eth_utils import is_address
-
+from time import time
 
 class Intent(object):
     
@@ -20,7 +20,17 @@ class Intent(object):
     
     EXPIRATION = 15
 
-    def __init__(self,intentAction, signer, wallet=None,dependencies=list(), salt=SALT, maxGasPrice=MAX_GAS_PRICE, minGasLimit=MIN_GAS_PRICE, expiration=EXPIRATION):
+    def __init__(
+        self,
+        intentAction,
+        signer,
+        wallet=None,
+        dependencies=list(),
+        salt = SALT,
+        maxGasPrice = MAX_GAS_PRICE,
+        minGasLimit = MIN_GAS_PRICE,
+        expiration = int(time()) + 365 * 86400 # 1 year from now
+    ):
         self.to = intentAction.contractAddress
         self.value = intentAction.value
         self.data = intentAction.encoded
