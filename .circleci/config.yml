@@ -42,7 +42,7 @@ jobs:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
-      - run: nosetests tests/*
+      - run: pipenv run nosetests tests/*
             
             
 workflows:
