@@ -15,7 +15,7 @@ jobs:
       - run: pipenv install . --dev
       - save_cache:
           paths:
-            - ~/.local/share/virtualenvs/venv  # this path depends on where pipenv creates a virtualenv
+            - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
           key: pip-packages-v2-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
   unit-test:
