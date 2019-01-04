@@ -1,57 +1,43 @@
 version: 2
 jobs:
-  checkout:
-    working_directory: ~/repo
-    docker:
-      - image: alpine/git:latest
-    steps:
-      - checkout
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - ./repo
-
   dependencies:
     docker:
       - image: circleci/python:3.6.4
     working_directory: ~/repo
     steps:
-      - attach_workspace:
-          at: ~/
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
+      - checkout
       - restore_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run:
-          command: |
-            sudo pip install pipenv
-            pipenv install .
-            pipenv install nose
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v3-{{ .Branch }}-
+            - pip-packages-v3-
+      - run: pipenv install . --dev
       - save_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
           paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.6/site-packages"
+            - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
+          key: pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
   unit-test:
     working_directory: ~/repo
     docker:
       - image: circleci/python:3.6.4
     steps:
-      - attach_workspace:
-          at: ~/
-      - run: nosetests tests/*
+      - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v3-{{ .Branch }}-
+            - pip-packages-v3-
+      - run: pipenv run nosetests tests/*
             
             
 workflows:
   version: 2
-  build-test-deploy:
+  build-test:
     jobs:
-      - checkout
-      - dependencies:
-          requires:
-            - checkout
+      - dependencies
       - unit-test:
           requires:
             - dependencies
