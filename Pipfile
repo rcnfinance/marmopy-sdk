@@ -9,6 +9,7 @@ nose = "*"
 [packages]
 marmopy = {path = "."}
 eth-utils = "~=0.8.1"
+coincurve = "*"
 
 [requires]
 python_version = "2.7"
