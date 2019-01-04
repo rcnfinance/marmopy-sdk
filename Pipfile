@@ -8,9 +8,6 @@ nose = "*"
 
 [packages]
 marmopy = {path = "."}
-eth-utils = "~=0.8.1"
-coincurve = "*"
-pycrypto = "*"
 
 [requires]
 python_version = "2.7"
@@ -18,3 +15,4 @@ web3 = "3.16.5"
 rlp = "0.6.0"
 pycryptodome = "3.7.2"
 coincurve = "11.0.0"
+eth-utils = "~=0.8.1"
