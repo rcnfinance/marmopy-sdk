@@ -136,8 +136,8 @@ requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json
 | maxGasPrice           | Int           | no        | 99999999      | Maximum gas price.                                       |
 | intentAction          | IntentAction  | yes       | 0x0           | IntentAction Example -> marmopy-sdk.examples.ERC20. 
 |
-| expiration            | Int           | no        | 15            | IntentAction Example -> marmopy-sdk.examples.ERC20. 
-|
+| expiration            | Int           | no        | 15            | 15 days for expiration
+|                                                                                                                           
 
 
 # Run Tests
