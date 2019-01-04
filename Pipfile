@@ -8,6 +8,7 @@ nose = "*"
 
 [packages]
 marmopy = {path = "."}
+eth-utils = "~=0.8.1"
 
 [requires]
 python_version = "2.7"
