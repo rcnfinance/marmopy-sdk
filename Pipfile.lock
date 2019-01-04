@@ -1,0 +1,28 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "ec5829de81bd5198d78d91d13a23359087d7c76a442b341b215b297a781557bc"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "coincurve": "11.0.0",
+            "pycryptodome": "3.7.2",
+            "python_version": "2.7",
+            "rlp": "0.6.0",
+            "web3": "3.16.5"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "marmopy": {
+            "path": "."
+        }
+    },
+    "develop": {}
+}
