@@ -1,12 +1,23 @@
 from marmopy.utils import keccak256,toHexStringNoPrefixZeroPadded,remove_0x_prefix
 from eth_utils import is_address
+from time import time
 
 class Intent(object):
     MAX_GAS_PRICE = 9999999999
     MIN_GAS_PRICE = 0
     SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'
     
-    def __init__(self,intentAction, signer, wallet,dependencies=list(), salt=SALT, maxGasPrice=MAX_GAS_PRICE, minGasLimit=MIN_GAS_PRICE):
+    def __init__(
+        self,
+        intentAction,
+        signer,
+        wallet,
+        dependencies = list(),
+        salt = SALT,
+        maxGasPrice = MAX_GAS_PRICE,
+        minGasLimit = MIN_GAS_PRICE,
+        expiration = int(time()) + 365 * 86400 # 1 year from now
+    ):
         self.to = intentAction.contractAddress
         self.value = intentAction.value
         self.data = intentAction.encoded
@@ -16,6 +27,7 @@ class Intent(object):
         self.salt = salt
         self.maxGasPrice = maxGasPrice
         self.minGasLimit = minGasLimit
+        self.expiration = expiration
         self.id = self._generateId()
         
         assert(is_address(self.signer))
@@ -23,7 +35,7 @@ class Intent(object):
         assert(is_address(self.to))
         
     def __setattr__(self, name, value):
-        if len(self.__dict__)<10:
+        if len(self.__dict__) < 11:
             super(Intent,self).__setattr__(name, value)
         else:
             if name in self.__dict__.keys():
@@ -49,6 +61,7 @@ class Intent(object):
         encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.minGasLimit))
         encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.maxGasPrice))
         encodedPackedBuilder.append(remove_0x_prefix(self.salt))      
+        encodedPackedBuilder.append(toHexStringNoPrefixZeroPadded(self.expiration))
         encodedPackedBuilder = "".join(encodedPackedBuilder)
         
         return "0x"+keccak256(encodedPackedBuilder)
