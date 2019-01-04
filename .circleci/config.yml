@@ -24,7 +24,7 @@ jobs:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
-      - run: pipenv install .
+      - run: pipenv install . --dev
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs/venv  # this path depends on where pipenv creates a virtualenv
