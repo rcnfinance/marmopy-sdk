@@ -31,8 +31,8 @@ class Intent(object):
         wallet=None,
         dependencies=list(),
         salt=SALT,
-        maxGasPrice=MAX_GAS_PRICE,
-        minGasLimit=MIN_GAS_PRICE,
+        max_gas_price=MAX_GAS_PRICE,
+        min_gas_limit=MIN_GAS_PRICE,
         expiration=int(time()) + 365 * 86400 # 1 year from now
     ):
         self.to = intentAction.contractAddress
@@ -42,27 +42,17 @@ class Intent(object):
         self.signer = signer
         self.wallet = wallet if wallet else self._generate_wallet_address(self.signer)
         self.salt = salt
-        self.maxGasPrice = maxGasPrice
-        self.minGasLimit = minGasLimit
-        self.expiration = expiration
+        self.max_gas_price = max_gas_price
+        self.min_gas_limit = min_gas_limit
+        self.expiration = expiration,
         self.id = self._generate_id()
 
         assert(is_address(self.signer))
         assert(is_address(self.wallet))
         assert(is_address(self.to))
 
-    def __setattr__(self, name, value):
-        if len(self.__dict__) < 11:
-            super(Intent, self).__setattr__(name, value)
-        else:
-            if name in self.__dict__.keys():
-                super(Intent, self).__setattr__(name, value)
-                super(Intent, self).__setattr__("id", self._generateId())
-            else:
-                raise Exception("Adding new variables not allowed.")
-
     def __repr__(self):
-        return str(self.__dict__)
+        return str(self.get_repr())
 
     def _generate_id(self):
         encoded_packed_builder = []
@@ -72,8 +62,8 @@ class Intent(object):
         encoded_packed_builder.append(remove_0x_prefix(self.to))
         encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.value))
         encoded_packed_builder.append(keccak256(self.data))
-        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.minGasLimit))
-        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.maxGasPrice))
+        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.min_gas_limit))
+        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.max_gas_price))
         encoded_packed_builder.append(remove_0x_prefix(self.salt))
         encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.expiration))
         encoded_packed_builder = "".join(encoded_packed_builder)
@@ -88,10 +78,26 @@ class Intent(object):
         return "0x" + address[24:]
 
     def sign(self, credentials):
-        results = self.__dict__.copy()
+        results = self.get_repr()
         results["tx"] = {}
         for tx_key in ["to", "value", "data", "minGasLimit", "maxGasPrice"]:
             results["tx"][tx_key] = results.pop(tx_key)
 
-        results["signature"] = credentials.signHash(self.id)
+        results["signature"] = credentials.sign_hash(self.id)
         return results
+
+    def get_repr(self):
+        data = {
+            "to": self.to,
+            "value": self.value,
+            "data": self.data,
+            "dependencies": self.dependencies,
+            "signer": self.signer,
+            "wallet": self.wallet,
+            "salt": self.salt,
+            "max_gas_price": self.max_gas_price,
+            "min_gas_limit": self.min_gas_limit,
+            "expiration": self.expiration,
+            "id": self._generate_id()
+        }
+        return data
