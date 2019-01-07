@@ -73,7 +73,7 @@ class Intent(object):
     def sign(self, credentials):
         results = self.get_repr()
         results["tx"] = {}
-        for tx_key in ["to", "value", "data", "minGasLimit", "maxGasPrice"]:
+        for tx_key in ["to", "value", "data", "min_gas_limit", "max_gas_price"]:
             results["tx"][tx_key] = results.pop(tx_key)
 
         results["signature"] = credentials.sign_hash(self.id)
@@ -110,7 +110,7 @@ class IntentGeneric(Intent):
         self.max_gas_price = max_gas_price
         self.min_gas_limit = min_gas_limit
         self.expiration = expiration
-        self.id = self._generateId()
+        self.id = self._generate_id()
 
         assert(is_address(self.signer))
         assert(is_address(self.wallet))
