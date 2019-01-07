@@ -24,27 +24,19 @@ class Intent(object):
 
     EXPIRATION = 15
 
-    def __init__(
-        self,
-        intentAction,
-        signer,
-        wallet=None,
-        dependencies=list(),
-        salt=SALT,
-        max_gas_price=MAX_GAS_PRICE,
-        min_gas_limit=MIN_GAS_PRICE,
-        expiration=int(time()) + 365 * 86400 # 1 year from now
-    ):
-        self.to = intentAction.contractAddress
-        self.value = intentAction.value
-        self.data = intentAction.encoded
+    def __init__(self, intent_action, signer, wallet=None, dependencies=list(), salt=SALT,
+                 max_gas_price=MAX_GAS_PRICE, min_gas_limit=MIN_GAS_PRICE, expiration=int(time()) + 365 * 86400 # 1 year from now
+                 ):
+        self.to = intent_action.contractAddress
+        self.value = intent_action.value
+        self.data = intent_action.encoded
         self.dependencies = dependencies
         self.signer = signer
         self.wallet = wallet if wallet else self._generate_wallet_address(self.signer)
         self.salt = salt
         self.max_gas_price = max_gas_price
         self.min_gas_limit = min_gas_limit
-        self.expiration = expiration,
+        self.expiration = expiration
         self.id = self._generate_id()
 
         assert(is_address(self.signer))
@@ -101,3 +93,24 @@ class Intent(object):
             "id": self._generate_id()
         }
         return data
+
+
+class IntentGeneric(Intent):
+    def __init__(self, data, contract_address, value, signer, wallet=None, dependencies=list(),
+                 salt=Intent.SALT, max_gas_price=Intent.MAX_GAS_PRICE,
+                 min_gas_limit=Intent.MIN_GAS_PRICE, expiration=int(time()) + 365 * 86400):
+        self.to = contract_address
+        self.value = value
+        self.data = data
+        self.dependencies = dependencies
+        self.signer = signer
+        self.wallet = wallet if wallet else self._generate_wallet_address(self.signer)
+        self.salt = salt
+        self.max_gas_price = max_gas_price
+        self.min_gas_limit = min_gas_limit
+        self.expiration = expiration
+        self.id = self._generateId()
+
+        assert(is_address(self.signer))
+        assert(is_address(self.wallet))
+        assert(is_address(self.to))
