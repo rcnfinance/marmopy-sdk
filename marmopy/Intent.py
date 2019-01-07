@@ -80,18 +80,11 @@ class Intent(object):
         return "0x"+keccak256(encodedPackedBuilder)
     
     def _generateWalletAddress(self,signer):
-    
         signer = signer.replace("0x","")
-
         initCode  = keccak256(Intent.BYTECODE_1 + Intent.MARMO_ADDRESS + Intent.BYTECODE_2)
-
-        byte = "ff"
-
-        concat = byte + Intent.MARMO_FACTORY_ADDRESS + signer + initCode
-
-        address = bytearray.fromhex(keccak256(concat))
-
-        return "0x"+address[-20:].hex()
+        concat = "ff" + Intent.MARMO_FACTORY_ADDRESS + "000000000000000000000000" + signer + initCode
+        address = keccak256(concat)
+        return "0x" + address[24:]
     
     
     def sign(self,credentials):

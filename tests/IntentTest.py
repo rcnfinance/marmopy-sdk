@@ -37,10 +37,9 @@ class IntentTests(unittest.TestCase):
         intentAction = self.erc20.balanceOf(self.to)
         
         intent = Intent(intentAction=intentAction, signer=self.credentials.getAddress(), expiration=15)
+        self.assertEqual(intent.wallet,'0x8bdd988a19f5c9fb82bd98797ac78c1f48bd5af8')
         
-        self.assertEqual(intent.wallet,'0x58afa2965bb771b88196d07385f2d33fa3c3799e')
-        
-        self.assertEqual(intent.id, '0x5fc68585fb0bcf09c5c4d73309c6eff6a8027d349dc122cc9d52b77a2e167cab')
+        self.assertEqual(intent.id, '0xf914432e0e9739b4ee726c1e52579f6d2e96cacac8bc391d3ffeae579372ade3')
         
     def testBalanceOfWithDependencies(self):
         intentAction = self.erc20.balanceOf(self.to)
