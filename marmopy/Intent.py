@@ -44,6 +44,7 @@ class Intent(object):
         assert(is_address(self.to))
 
     def __repr__(self):
+
         return str(self.get_repr())
 
     def _generate_id(self):
