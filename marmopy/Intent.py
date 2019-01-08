@@ -80,6 +80,7 @@ class Intent(object):
         return results
 
     def get_repr(self):
+        self.id = self._generate_id()
         data = {
             "to": self.to,
             "value": self.value,
@@ -91,7 +92,7 @@ class Intent(object):
             "max_gas_price": self.max_gas_price,
             "min_gas_limit": self.min_gas_limit,
             "expiration": self.expiration,
-            "id": self._generate_id()
+            "id": self.id
         }
         return data
 
