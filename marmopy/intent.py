@@ -37,14 +37,16 @@ class Intent(object):
         self.max_gas_price = max_gas_price
         self.min_gas_limit = min_gas_limit
         self.expiration = expiration
-        self.id = self._generate_id()
 
         assert(is_address(self.signer))
         assert(is_address(self.wallet))
         assert(is_address(self.to))
 
-    def __repr__(self):
+    @property
+    def id(self):
+        return self._generate_id()
 
+    def __repr__(self):
         return str(self.get_repr())
 
     def _generate_id(self):
@@ -80,7 +82,6 @@ class Intent(object):
         return results
 
     def get_repr(self):
-        self.id = self._generate_id()
         data = {
             "to": self.to,
             "value": self.value,
@@ -111,7 +112,6 @@ class IntentGeneric(Intent):
         self.max_gas_price = max_gas_price
         self.min_gas_limit = min_gas_limit
         self.expiration = expiration
-        self.id = self._generate_id()
 
         assert(is_address(self.signer))
         assert(is_address(self.wallet))

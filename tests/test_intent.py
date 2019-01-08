@@ -58,7 +58,7 @@ class IntentTests(unittest.TestCase):
                             "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
 
         intent.dependencies = new_dependencies
-        intent.get_repr()
+
         self.assertEqual(intent.id, "0x0d42d9890e1c0cca4d56ec5b532e6f7f1597f5cda57a0c1726f0eb25d2bc4a26")
 
     def test_balance_of_with_custom_gas_prices(self):
@@ -90,7 +90,7 @@ class IntentTests(unittest.TestCase):
         self.assertEqual(intent.id, "0x63bfa4961085e360ff2507256aae202ef05fe1883475eb21456796b81f5a0e58")
 
         intent.salt = "0x0000000000000000000000000000000000000000000000000000000000000002"
-        intent.get_repr()
+
         self.assertEqual(intent.id, "0x6e78ee9f136303375275ad50c6f0823f5863a148d351552409685a8b491d3a98")
 
     def test_balance_of_with_custom_expiration(self):
