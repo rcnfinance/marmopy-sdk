@@ -116,7 +116,8 @@ from marmopy import Intent,Credentials,IntentGeneric
 from examples.generic_contract import Contract
 
 '''
-can load the full abi of any contract for the demonstration mode, only the necessary part for the example is loaded
+can load the full abi, in var abi, of any contract for the demonstration mode, 
+only the necessary part for the example is loaded
 '''
 abi = """
 [
