@@ -74,26 +74,23 @@ class Intent(object):
 
     def sign(self, credentials):
         results = self.get_repr()
-        results["tx"] = {}
-        for tx_key in ["to", "value", "data", "min_gas_limit", "max_gas_price"]:
-            results["tx"][tx_key] = results.pop(tx_key)
-
         results["signature"] = credentials.sign_hash(self.id)
         return results
 
     def get_repr(self):
         data = {
-            "to": self.to,
-            "value": self.value,
-            "data": self.data,
+            "id": self.id,
             "dependencies": self.dependencies,
-            "signer": self.signer,
             "wallet": self.wallet,
+            "tx": {
+                "to": self.to,
+                "value": self.value,
+                "data": self.data,
+                "maxGasPrice": self.max_gas_price,
+                "minGasLimit": self.min_gas_limit,
+            },
             "salt": self.salt,
-            "max_gas_price": self.max_gas_price,
-            "min_gas_limit": self.min_gas_limit,
-            "expiration": self.expiration,
-            "id": self.id
+            "signer": self.signer,
         }
         return data
 
