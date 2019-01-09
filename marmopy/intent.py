@@ -90,7 +90,8 @@ class Intent(object):
                 "minGasLimit": self.min_gas_limit,
             },
             "salt": self.salt,
-            "signer": self.signer,
+            "signer": str(self.signer),
+            "expiration": self.expiration,
         }
         return data
 
