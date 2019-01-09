@@ -41,7 +41,7 @@ Marmo relayer: (https://github.com/ripio/marmo-relayer).
 Pip install from git url:
 
 ```shell
-pip install git+https://github.com/majd1239/marmopy-sdk
+pip install git+https://github.com/ripio/marmopy-sdk
 ```
 
 ### Intent Flowchart
@@ -92,14 +92,14 @@ class Contract:
     def transfer(self, to='address', value='uint256') : return 'bool'
     
     
-tokenContractAddress = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
+token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
 to = "0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB"
 
 erc20 = Contract(tokenContractAddress)  #example of ERC20 contract with IntentActions injections. 
 
 value = 1
 
-intentAction = erc20.transfer(to,value)
+intent_action = erc20.transfer(to,value)
 
 credentials = Credentials("Your private key here");
 
@@ -107,19 +107,19 @@ credentials = Credentials("Your private key here");
 dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f536e",
                 "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
 
-intent = Intent(intentAction=intentAction, signer=credentials.getAddress())
+intent = Intent(intent_action=intent_action, signer=credentials.getAddress())
 ```
 
 ### Sign a intent
 ```python
-signedIntent = intent.sign(credentials);
+signed_intent = intent.sign(credentials);
 ```
 
 ###  Send a intent
 ```python
 import requests
 
-requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json=signedIntent)  #relay url
+requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json=signed_intent)  #relay url
 
 ```
 
@@ -134,7 +134,7 @@ requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json
 | salt                  | hexstring     | no        | 0x0           | Use to send the same intent many times if needed.        |
 | minGasLimit           | Int           | no        | 0             | Minimum gas price.                                       |
 | maxGasPrice           | Int           | no        | 99999999      | Maximum gas price.                                       |
-| intentAction          | IntentAction  | yes       | 0x0           | IntentAction Example -> marmopy-sdk.examples.ERC20.     |
+| intent_action          | IntentAction  | yes       | 0x0           | IntentAction Example -> marmopy-sdk.examples.ERC20.     |
 | expiration            | Int           | no        | 15            | Contract Expiration Date in Days.                                 |
 
 
