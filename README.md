@@ -110,6 +110,59 @@ dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f5
 intent = Intent(intent_action=intent_action, signer=credentials.get_address())
 ```
 
+### Build a intent generic
+```python
+from marmopy import Intent,Credentials,IntentGeneric
+from examples.generic_contract import Contract
+
+'''
+can load the full abi of any contract for the demonstration mode, only the necessary part for the example is loaded
+'''
+abi = """
+[
+	{
+		"constant":false,
+		"inputs":[
+			{
+				"name":"_to",
+				"type":"address"
+			},
+			{
+				"name":"_value",
+				"type":"uint256"
+			}
+		],
+		"name":"transfer",
+		"outputs":[
+			{
+				"name":"success",
+				"type":"bool"
+			}
+		],
+		"payable":false,
+		"type":"function"
+	}
+]
+"""
+    
+    
+token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
+to = "0xA6693e041aAfE9b9D722338Ca9f8A6e7746d7148"
+
+
+c = Contract(abi)
+data = c.transfer({"_to":to, "_value":0})
+
+
+# Intents ids 32 bits hashestrings dependencies
+dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f536e",
+                "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
+
+intent = IntentGeneric(data, token_contract_address, 0, credentials.get_address())
+
+```
+
+
 ### Sign a intent
 ```python
 signed_intent = intent.sign(credentials);
