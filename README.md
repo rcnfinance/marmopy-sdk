@@ -95,7 +95,7 @@ class Contract:
 token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
 to = "0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB"
 
-erc20 = Contract(tokenContractAddress)  #example of ERC20 contract with IntentActions injections. 
+erc20 = Contract(token_contract_address)  #example of ERC20 contract with IntentActions injections. 
 
 value = 1
 
@@ -107,7 +107,7 @@ credentials = Credentials("Your private key here");
 dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f536e",
                 "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
 
-intent = Intent(intent_action=intent_action, signer=credentials.getAddress())
+intent = Intent(intent_action=intent_action, signer=credentials.get_address())
 ```
 
 ### Sign a intent
