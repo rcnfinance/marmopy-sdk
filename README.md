@@ -41,7 +41,7 @@ Marmo relayer: (https://github.com/ripio/marmo-relayer).
 Pip install from git url:
 
 ```shell
-pip install git+https://github.com/majd1239/marmopy-sdk
+pip install git+https://github.com/ripio/marmopy-sdk
 ```
 
 ### Intent Flowchart
