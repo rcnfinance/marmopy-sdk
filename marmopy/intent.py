@@ -1,53 +1,43 @@
+import requests
+
+from eth_utils import (
+    remove_0x_prefix
+)
 from marmopy.utils import (
     keccak256,
-    to_hex_string_no_prefix_zero_padded,
-    remove_0x_prefix)
+    to_hex_string_no_prefix_zero_padded
+)
 from eth_utils import is_address
 from time import time
 
-
 class Intent(object):
+    DEFAULT_SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    DEFAULT_MIN_GAS_PRICE = 0
+    DEFAULT_MAX_GAS_PRICE = 9999999999
 
-    MAX_GAS_PRICE = 9999999999
-
-    MIN_GAS_PRICE = 0
-
-    SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'
-    BYTECODE_1 = "6080604052348015600f57600080fd5b50606780601d6000396000f3fe6080604052366000803760008036600073"
-    BYTECODE_2 = "5af43d6000803e8015156036573d6000fd5b3d6000f3fea165627a7a7230582033b260661546dd9894b994173484da72335f9efc37248d27e6da483f15afc1350029"
-    MARMO_FACTORY_ADDRESS = "1053deb5e0f1697289b8a1b11aa870f07a7fb221"
-    MARMO_ADDRESS = "3618a379f2624f42c0a8c79aad8db9d24d6e0312"
-
-    EXPIRATION = 15
-
-    def __init__(self, intent_action, signer, wallet=None, dependencies=list(), salt=SALT,
-                 max_gas_price=MAX_GAS_PRICE, min_gas_limit=MIN_GAS_PRICE, expiration=int(time()) + 365 * 86400 # 1 year from now
-                 ):
+    def __init__(
+        self,
+        intent_action,
+        dependencies=list(),
+        salt = DEFAULT_SALT,
+        max_gas_price = DEFAULT_MAX_GAS_PRICE,
+        min_gas_limit = DEFAULT_MIN_GAS_PRICE,
+        expiration = int(time()) + 365 * 86400 # 1 year from now
+    ):
         self.to = intent_action.contractAddress
         self.value = intent_action.value
         self.data = intent_action.encoded
         self.dependencies = dependencies
-        self.signer = signer
-        self.wallet = wallet if wallet else self._generate_wallet_address(self.signer)
         self.salt = salt
         self.max_gas_price = max_gas_price
         self.min_gas_limit = min_gas_limit
         self.expiration = expiration
 
-        assert(is_address(self.signer))
-        assert(is_address(self.wallet))
         assert(is_address(self.to))
 
-    @property
-    def id(self):
-        return self._generate_id()
-
-    def __repr__(self):
-        return str(self.get_repr())
-
-    def _generate_id(self):
+    def id(self, wallet):
         encoded_packed_builder = []
-        encoded_packed_builder.append(self.wallet)
+        encoded_packed_builder.append(wallet.address)
         dependencies = "".join(map(remove_0x_prefix, self.dependencies))
         encoded_packed_builder.append(keccak256(dependencies))
         encoded_packed_builder.append(remove_0x_prefix(self.to))
@@ -58,55 +48,33 @@ class Intent(object):
         encoded_packed_builder.append(remove_0x_prefix(self.salt))
         encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.expiration))
         encoded_packed_builder = "".join(encoded_packed_builder)
-
         return "0x" + keccak256(encoded_packed_builder)
 
-    def _generate_wallet_address(self, signer):
-        signer = signer.replace("0x", "")
-        init_code = keccak256(Intent.BYTECODE_1 + Intent.MARMO_ADDRESS + Intent.BYTECODE_2)
-        concat = "ff" + Intent.MARMO_FACTORY_ADDRESS + "000000000000000000000000" + signer + init_code
-        address = keccak256(concat)
-        return "0x" + address[24:]
 
-    def sign(self, credentials):
-        results = self.get_repr()
-        results["signature"] = credentials.sign_hash(self.id)
-        return results
-
-    def get_repr(self):
-        data = {
+class SignedIntent(object):
+    def __init__(self, intent, wallet, signature):
+        self.intent = intent
+        self.wallet = wallet
+        self.signature = signature
+        self.id = intent.id(wallet)
+    
+    def toJson(self):
+        return {
             "id": self.id,
-            "dependencies": self.dependencies,
-            "wallet": self.wallet,
+            "dependencies": self.intent.dependencies,
+            "wallet": self.wallet.address,
             "tx": {
-                "to": self.to,
-                "value": self.value,
-                "data": self.data,
-                "maxGasPrice": self.max_gas_price,
-                "minGasLimit": self.min_gas_limit,
+                "to": self.intent.to,
+                "value": self.intent.value,
+                "data": self.intent.data,
+                "maxGasPrice": self.intent.max_gas_price,
+                "minGasLimit": self.intent.min_gas_limit,
             },
-            "salt": self.salt,
-            "signer": str(self.signer),
-            "expiration": self.expiration,
+            "salt": self.intent.salt,
+            "signer": self.wallet.signer,
+            "expiration": self.intent.expiration,
+            "signature": self.signature
         }
-        return data
 
-
-class IntentGeneric(Intent):
-    def __init__(self, data, contract_address, value, signer, wallet=None, dependencies=list(),
-                 salt=Intent.SALT, max_gas_price=Intent.MAX_GAS_PRICE,
-                 min_gas_limit=Intent.MIN_GAS_PRICE, expiration=int(time()) + 365 * 86400):
-        self.to = contract_address
-        self.value = value
-        self.data = data
-        self.dependencies = dependencies
-        self.signer = signer
-        self.wallet = wallet if wallet else self._generate_wallet_address(self.signer)
-        self.salt = salt
-        self.max_gas_price = max_gas_price
-        self.min_gas_limit = min_gas_limit
-        self.expiration = expiration
-
-        assert(is_address(self.signer))
-        assert(is_address(self.wallet))
-        assert(is_address(self.to))
+    def relay(self, relayer):
+        return requests.post(relayer, json=self.toJson())

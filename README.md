@@ -41,7 +41,7 @@ Marmo relayer: (https://github.com/ripio/marmo-relayer).
 Pip install from git url:
 
 ```shell
-pip install git+https://github.com/ripio/marmopy-sdk
+pip install git+https://github.com/majd1239/marmopy-sdk
 ```
 
 ### Intent Flowchart
@@ -79,10 +79,25 @@ pip install git+https://github.com/ripio/marmopy-sdk
 > - T28 -> T25
 > - T29 -> T27
 
+### Configure SDK
+```python
+from marmopy import DefaultConf
+
+DefaultConf.ROPSTEN.as_default()
+```
+
+### Create a Marmo wallet
+```python
+from marmopy import Wallet
+
+wallet = Wallet("Your private key here")
+print(wallet.address) # This is your Marmo wallet address!
+
+```
 
 ### Build a intent
 ```python
-from marmopy import Intent,Credentials,IntentAction
+from marmopy import Intent, IntentAction, DefaultConf
 
 class Contract:
     def __init__(self,contractAddress):
@@ -91,90 +106,18 @@ class Contract:
     @IntentAction
     def transfer(self, to='address', value='uint256') : return 'bool'
     
-    
-token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
-to = "0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB"
 
-erc20 = Contract(token_contract_address)  #example of ERC20 contract with IntentActions injections. 
+erc20 = Contract("0x2f45b6fb2f28a73f110400386da31044b2e953d4")  #example of ERC20 contract with IntentActions injections. 
+intentAction = erc20.transfer("0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB", 0)
 
-value = 1
-
-intent_action = erc20.transfer(to,value)
-
-credentials = Credentials("Your private key here");
-
-# Intents ids 32 bits hashestrings dependencies
-dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f536e",
-                "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
-
-intent = Intent(intent_action=intent_action, signer=credentials.get_address())
-```
-
-### Build a intent generic
-```python
-from marmopy import Intent,Credentials,IntentGeneric
-from examples.generic_contract import Contract
-
-'''
-can load the full abi, in var abi, of any contract for the demonstration mode, 
-only the necessary part for the example is loaded
-'''
-abi = """
-[
-	{
-		"constant":false,
-		"inputs":[
-			{
-				"name":"_to",
-				"type":"address"
-			},
-			{
-				"name":"_value",
-				"type":"uint256"
-			}
-		],
-		"name":"transfer",
-		"outputs":[
-			{
-				"name":"success",
-				"type":"bool"
-			}
-		],
-		"payable":false,
-		"type":"function"
-	}
-]
-"""
-    
-    
-token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
-to = "0xA6693e041aAfE9b9D722338Ca9f8A6e7746d7148"
-
-
-c = Contract(abi)
-data = c.transfer({"_to":to, "_value":0})
-
-
-# Intents ids 32 bits hashestrings dependencies
-dependencies = ["0xee2e1b62b008e27a5a3d66352f87e760ed85e723b6834e622f38b626090f536e",
-                "0x6b67aac6eda8798297b1591da36a215bfbe1fed666c4676faf5a214d54e9e928"]
-
-intent = IntentGeneric(data, token_contract_address, 0, credentials.get_address())
-
+intent = Intent(intent_action = intentAction)
 ```
 
 
-### Sign a intent
+### Sign an relay intent
 ```python
-signed_intent = intent.sign(credentials);
-```
-
-###  Send a intent
-```python
-import requests
-
-requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json=signed_intent)  #relay url
-
+signedIntent = wallet.sign(intent)
+signedIntent.relay("<Relayer URL>")
 ```
 
 # Structure of builder
@@ -188,7 +131,7 @@ requests.post("http://ec2-3-16-37-20.us-east-2.compute.amazonaws.com/relay",json
 | salt                  | hexstring     | no        | 0x0           | Use to send the same intent many times if needed.        |
 | minGasLimit           | Int           | no        | 0             | Minimum gas price.                                       |
 | maxGasPrice           | Int           | no        | 99999999      | Maximum gas price.                                       |
-| intent_action          | IntentAction  | yes       | 0x0           | IntentAction Example -> marmopy-sdk.examples.ERC20.     |
+| intentAction          | IntentAction  | yes       | 0x0           | IntentAction Example -> marmopy-sdk.examples.ERC20.     |
 | expiration            | Int           | no        | 15            | Contract Expiration Date in Days.                                 |
 
 
