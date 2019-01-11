@@ -113,8 +113,48 @@ intentAction = erc20.transfer("0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB", 0)
 intent = Intent(intent_action = intentAction)
 ```
 
+### Build a intent generic	
+```python	
+from marmopy import Intent,Credentials,IntentGeneric	
+from examples.generic_contract import Contract	
 
-### Sign an relay intent
+// can load the full abi, in var abi, of any contract for the demonstration mode, 	
+// only the necessary part for the example is loaded	
+'''	
+abi = """	
+[	
+	{	
+		"constant":false,	
+		"inputs":[	
+			{	
+				"name":"_to",	
+				"type":"address"	
+			},	
+			{	
+				"name":"_value",	
+				"type":"uint256"	
+			}	
+		],	
+		"name":"transfer",	
+		"outputs":[	
+			{	
+				"name":"success",	
+				"type":"bool"	
+			}	
+		],	
+		"payable":false,	
+		"type":"function"	
+	}	
+]	
+```	
+    	
+token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN	
+to = "0xA6693e041aAfE9b9D722338Ca9f8A6e7746d7148"	
+data = Contract(abi).transfer({"_to":to, "_value":0})	
+
+intent = IntentGeneric(data, token_contract_address, 0, credentials.get_address())
+
+### Sign and relay intent
 ```python
 signedIntent = wallet.sign(intent)
 signedIntent.relay("<Relayer URL>")
