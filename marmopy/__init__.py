@@ -1,3 +1,3 @@
-from .Intent import Intent
-from .IntentAction import IntentAction
+from .intent import Intent, IntentGeneric
+from .intent_action import IntentAction
 from .utils import Credentials
