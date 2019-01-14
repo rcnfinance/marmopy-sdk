@@ -115,7 +115,7 @@ intent = Intent(intent_action = intentAction)
 
 ### Build a intent generic	
 ```python	
-from marmopy import Intent,Credentials,IntentGeneric	
+from marmopy import Intent, IntentGeneric	
 from examples.generic_contract import Contract	
 
 // can load the full abi, in var abi, of any contract for the demonstration mode, 	
@@ -152,7 +152,7 @@ token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN
 to = "0xA6693e041aAfE9b9D722338Ca9f8A6e7746d7148"	
 data = Contract(abi).transfer({"_to":to, "_value":0})	
 
-intent = IntentGeneric(data, token_contract_address, 0, credentials.get_address())
+intent = IntentGeneric(data, token_contract_address, 0)
 ```
 
 ### Sign and relay intent
