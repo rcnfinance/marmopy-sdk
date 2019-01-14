@@ -58,7 +58,7 @@ class SignedIntent(object):
         self.signature = signature
         self.id = intent.id(wallet)
     
-    def toJson(self):
+    def to_json(self):
         return {
             "id": self.id,
             "dependencies": self.intent.dependencies,
@@ -77,4 +77,4 @@ class SignedIntent(object):
         }
 
     def relay(self, relayer):
-        return requests.post(relayer, json=self.toJson())
+        return requests.post(relayer, json=self.to_json())
