@@ -14,4 +14,4 @@ class Conf:
         glob_conf = self
 
 class DefaultConf:
-    ROPSTEN = Conf("0x5cde6918eab87f0d3828841c5e63362b583d34513a2a64dd32c5d033d252937b", "0x1053deb5e0f1697289b8a1b11aa870f07a7fb221", 3)
+    ROPSTEN = Conf("0x98ef25e9f596000233ed019f909cc8a5f35984f1cc0b0b9e05407ce7a6820bc1", "0x6306b6a26c70c03279c037f630be03046104cb37", 3)
