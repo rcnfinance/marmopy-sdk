@@ -9,7 +9,7 @@ from coincurve.keys import PrivateKey
 from Crypto.Hash import keccak
 from .intent import Intent, SignedIntent
 from .utils import keccak256
-from .conf import global_conf
+from .conf import Config
 
 class Credentials:
     def __init__(self, private_key):
@@ -38,22 +38,19 @@ class Credentials:
         return {"r": r, "s": s, "v": v}
 
 class Wallet:
-    def __init__(self, private_key, config = None):
-        if not config:
-            if not global_conf():
-                raise AssertionError("MarmoPY Should be configured or a custom configuration should be provided")
-            config = global_conf()
+    def __init__(self, private_key):
+        if Config.configured is False:
+            raise AssertionError("MarmoPY Should be configured or a custom configuration should be provided")
             
-        if private_key is Credentials:
+        if isinstance(private_key, Credentials):
             self.credentials = private_key
         else:
             self.credentials = Credentials(private_key)
 
-        self.config = config
+        self.config = Config
+
+        self.signer = self.credentials.address
     
-    @property
-    def signer(self):
-        return self.credentials.address
 
     @property
     def address(self):
