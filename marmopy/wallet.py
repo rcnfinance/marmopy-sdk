@@ -9,7 +9,7 @@ from coincurve.keys import PrivateKey
 from Crypto.Hash import keccak
 from .intent import Intent, SignedIntent
 from .utils import keccak256
-from .conf import Config
+from .config import Config
 
 class Credentials:
     def __init__(self, private_key):
