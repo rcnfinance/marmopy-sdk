@@ -13,7 +13,7 @@ from provider import global_provider
 from constants import wallet_abi
 from web3 import Web3
 from web3.exceptions import BadFunctionCallOutput
-from status_receipt import IntentReceipt, StatusReceipt, Status
+from status_receipt import IntentReceipt, StatusReceipt, StatusCode
 from utils import decode_receipt_event
 
 import json
@@ -121,7 +121,7 @@ class SignedIntent(object):
         try:
             block = contract.call().relayedAt(Web3.toBytes(hexstr=self.id))
         except BadFunctionCallOutput:
-            return StatusReceipt(Status.pending)
+            return StatusReceipt(StatusCode.pending)
 
         if block != 0:
             relayer = contract.call().relayedBy(Web3.toBytes(hexstr=self.id))
@@ -140,7 +140,7 @@ class SignedIntent(object):
             print(relay_event)
 
             return StatusReceipt(
-                Status.completed,
+                StatusCode.completed,
                 IntentReceipt(
                     relay_event[0]["tx_hash"],
                     relayer,
@@ -149,7 +149,7 @@ class SignedIntent(object):
                 )
             )
         
-        return StatusReceipt(Status.pending)
+        return StatusReceipt(StatusCode.pending)
 
     def relay(self, provider = None):
         if not provider:

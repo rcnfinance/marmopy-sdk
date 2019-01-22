@@ -1,10 +1,10 @@
 from enum import Enum
 
-Status = Enum('pending', 'settling', 'completed')
+StatusCode = Enum('pending', 'settling', 'completed')
 
 class StatusReceipt(object):
-    def __init__(self, status, receipt = None):
-        self.status = status
+    def __init__(self, code, receipt = None):
+        self.code = code
         self.receipt = receipt
 
 class IntentReceipt(object):
