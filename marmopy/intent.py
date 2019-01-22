@@ -153,7 +153,7 @@ class SignedIntent(object):
 
     def relay(self, provider = None):
         if not provider:
-            provider = deglobal_provider()
+            provider = global_provider()
             assert provider
 
         return requests.post(provider.relayer + "/relay", json=self.to_json())
