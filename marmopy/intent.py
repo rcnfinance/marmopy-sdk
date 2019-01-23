@@ -137,8 +137,6 @@ class SignedIntent(object):
 
             event_data = decode_receipt_event(relay_event[0]["data"])
 
-            print(relay_event)
-
             return StatusReceipt(
                 StatusCode.completed,
                 IntentReceipt(
