@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "58ffec1f5a137910d527ad0404f39f95be0206dabc07987d048519c555bafea6"
+            "sha256": "a7083987e3b7cb6ade2bc5a4343d164c4caf152f0bfaef592f4af1d156a8b878"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -20,8 +20,24 @@
         ]
     },
     "default": {
+        "enum": {
+            "hashes": [
+                "sha256:8c7cf3587eda51008bcc1eed99ea2c331ccd265c231dbaa95ec5258d3dc03100"
+            ],
+            "index": "pypi",
+            "version": "==0.4.7"
+        },
         "marmopy": {
             "path": "."
+        },
+        "nose": {
+            "hashes": [
+                "sha256:9ff7c6cc443f8c51994b34a667bbcf45afd6d945be7477b52e97516fd17c53ac",
+                "sha256:dadcddc0aefbf99eea214e0f1232b94f2fa9bd98fa8353711dacb112bfcbbb2a",
+                "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98"
+            ],
+            "index": "pypi",
+            "version": "==1.3.7"
         }
     },
     "develop": {
@@ -37,17 +53,17 @@
                 "sha256:9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a",
                 "sha256:f0b0e4eba956de51238e17573b7087e852dfe9854afd2e9c873f73fc0ca0a6dd"
             ],
-            "markers": "python_version == '2.7'",
+            "markers": "python_version < '3.4'",
             "version": "==1.5"
         },
         "configparser": {
             "hashes": [
-                "sha256:17fe5463b69cd06aa315bce000b8c8bfa8f064ad3be751e7bea3dadb6700b790",
-                "sha256:3663a8704c16460715b52b69caeb206bcb396c309973fc0689dc40b55a4a7256",
-                "sha256:f41e19cb29bebfccb1a78627b3f328ec198cc8f39510c7c55e7dfc0ab58c8c62"
+                "sha256:5bd5fa2a491dc3cfe920a3f2a107510d65eceae10e9c6e547b90261a4710df32",
+                "sha256:c114ff90ee2e762db972fa205f02491b1f5cf3ff950decd8542c62970c9bedac",
+                "sha256:df28e045fbff307a28795b18df6ac8662be3219435560ddb068c283afab1ea7a"
             ],
             "markers": "python_version == '2.7'",
-            "version": "==3.5.1"
+            "version": "==3.7.1"
         },
         "enum34": {
             "hashes": [
@@ -149,7 +165,6 @@
         },
         "wrapt": {
             "hashes": [
-                "sha256:0d5312d467d916ddf99dc8cc22ca3de886e0038a3748b0ef1277fcb28c3fb22d",
                 "sha256:4aea003270831cceb8a90ff27c4031da6ead7ec1886023b80ce0dfe0adf61533"
             ],
             "version": "==1.11.1"
