@@ -184,7 +184,7 @@ class SignedIntent(object):
         try:
             block = contract.call().relayedAt(Web3.toBytes(hexstr=self.id))
         except BadFunctionCallOutput:
-            return StatusReceipt(StatusCode.pending)
+            return { 'code': 'pending' }
 
         if block != 0:
             relayer = contract.call().relayedBy(Web3.toBytes(hexstr=self.id))
@@ -200,19 +200,17 @@ class SignedIntent(object):
 
             event_data = decode_receipt_event(relay_event[0]["data"])
 
-            print(relay_event)
-
-            return StatusReceipt(
-                StatusCode.completed,
-                IntentReceipt(
-                    relay_event[0]["tx_hash"],
-                    relayer,
-                    block,
-                    event_data["success"]
-                )
-            )
-        
-        return StatusReceipt(StatusCode.pending)
+            return {
+                'code': 'completed',
+                'receipt': {
+                    'tx_hash': relay_event[0]["tx_hash"],
+                    'relayer': relayer,
+                    'block_number': block,
+                    'success': event_data["success"]
+                }
+            }
+        else:
+            return { 'code': 'pending' }
 
     def relay(self, provider = None):
         if not provider:
