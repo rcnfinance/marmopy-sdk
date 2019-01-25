@@ -14,7 +14,6 @@ from provider import global_provider
 from constants import wallet_abi
 from web3 import Web3
 from web3.exceptions import BadFunctionCallOutput
-from status_receipt import IntentReceipt, StatusReceipt, StatusCode
 from utils import decode_receipt_event
 from web3.contract import Contract as Web3Contract
 import json
