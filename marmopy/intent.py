@@ -10,7 +10,13 @@ from marmopy.utils import (
 )
 from eth_utils import is_address
 from time import time
+from provider import global_provider
+from constants import wallet_abi
+from web3 import Web3
+from web3.exceptions import BadFunctionCallOutput
+from utils import decode_receipt_event
 from web3.contract import Contract as Web3Contract
+import json
 
 class Intent(object):
     DEFAULT_SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -166,5 +172,48 @@ class SignedIntent(object):
             "signature": self.signature
         }
 
-    def relay(self, relayer):
-        return requests.post(relayer, json=self.to_json())
+    def status(self, provider = None):
+        if not provider:
+            provider = global_provider()
+            assert provider
+
+        w3 = provider.web3
+        contract = w3.eth.contract(abi = json.loads(wallet_abi), address = self.wallet.address)
+
+        try:
+            block = contract.call().relayedAt(Web3.toBytes(hexstr=self.id))
+        except BadFunctionCallOutput:
+            return { 'code': 'pending' }
+
+        if block != 0:
+            relayer = contract.call().relayedBy(Web3.toBytes(hexstr=self.id))
+            relay_event = w3.manager.request_blocking(
+                "eth_getLogs",
+                [{
+                    'fromBlock': hex(block),
+                    'toBlock': hex(block),
+                    'address': self.wallet.address,
+                    'topics': [None, self.id]
+                }],
+            )
+
+            event_data = decode_receipt_event(relay_event[0]["data"])
+
+            return {
+                'code': 'completed',
+                'receipt': {
+                    'tx_hash': relay_event[0]["tx_hash"],
+                    'relayer': relayer,
+                    'block_number': block,
+                    'success': event_data["success"]
+                }
+            }
+        else:
+            return { 'code': 'pending' }
+
+    def relay(self, provider = None):
+        if not provider:
+            provider = global_provider()
+            assert provider
+
+        return requests.post(provider.relayer + "/relay", json=self.to_json())

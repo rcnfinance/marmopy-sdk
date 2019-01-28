@@ -9,6 +9,8 @@ pylint = "<2.0.0"
 
 [packages]
 marmopy = {path = "."}
+nose = "*"
+enum = "*"
 
 [requires]
 python_version = "2.7"
