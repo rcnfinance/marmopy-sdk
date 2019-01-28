@@ -100,18 +100,10 @@ print(wallet.address) # This is your Marmo wallet address!
 
 ### Build a intent
 ```python
-from marmopy import Intent, IntentAction, DefaultConf
+from marmopy import Intent, IntentAction, DefaultConf, ERC20
 
-class Contract:
-    def __init__(self,contractAddress):
-        self.contractAddress = contractAddress
-        
-    @IntentAction
-    def transfer(self, to='address', value='uint256') : return 'bool'
-    
-
-erc20 = Contract("0x2f45b6fb2f28a73f110400386da31044b2e953d4")  #example of ERC20 contract with IntentActions injections. 
-intentAction = erc20.transfer("0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB", 0)
+token = ERC20("0x2f45b6fb2f28a73f110400386da31044b2e953d4")  #example of ERC20 contract with IntentActions injections. 
+intentAction = token.transfer("0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB", 0)
 
 intent = Intent(intent_action = intentAction)
 ```
