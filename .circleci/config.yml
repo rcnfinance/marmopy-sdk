@@ -1,6 +1,38 @@
 version: 2
 jobs:
-  dependencies:
+  dependencies-python-2:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip2-packages-v3-{{ .Branch }}-
+            - pip2-packages-v3-
+      - run: pipenv install . --dev
+      - save_cache:
+          paths:
+            - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
+          key: pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+
+  test-python-2:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip2-packages-v3-{{ .Branch }}-
+            - pip2-packages-v3-
+      - run: pipenv run nosetests tests/*
+
+  dependencies-python-3:
     docker:
       - image: circleci/python:3.6.4
     working_directory: ~/repo
@@ -18,7 +50,7 @@ jobs:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
           key: pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
-  unit-test:
+  test-python-3:
     working_directory: ~/repo
     docker:
       - image: circleci/python:3.6.4
@@ -37,7 +69,11 @@ workflows:
   version: 2
   build-test:
     jobs:
-      - dependencies
-      - unit-test:
+      - dependencies-python-2
+      - dependencies-python-3
+      - test-python-2:
           requires:
-            - dependencies
+            - dependencies-python-2
+      - test-python-3:
+          requires:
+            - dependencies-python-3
