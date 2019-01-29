@@ -26,12 +26,15 @@ class Intent(object):
     def __init__(
         self,
         intent_action,
-        intent_dependencies = [],
+        intent_dependencies = None,
         salt = DEFAULT_SALT,
         max_gas_price = DEFAULT_MAX_GAS_PRICE,
         min_gas_limit = DEFAULT_MIN_GAS_LIMIT,
         expiration = int(time()) + 365 * 86400 # 1 year from now
     ):
+        if not intent_action:
+            intent_dependencies = []
+
         self.to = intent_action.contractAddress
         self.value = intent_action.value
         self.data = intent_action.encoded
@@ -126,12 +129,15 @@ class IntentGeneric(Intent):
             data,
             contract_address,
             value,
-            intent_dependencies=[],
+            intent_dependencies = None,
             salt=Intent.DEFAULT_SALT,
             max_gas_price=Intent.DEFAULT_MAX_GAS_PRICE,
             min_gas_limit=Intent.DEFAULT_MIN_GAS_LIMIT,
             expiration=int(time()) + 365 * 86400
     ):
+        if not intent_dependencies:
+            intent_dependencies = []
+
         self.to = contract_address
         self.value = value
         self.intent_dependencies = intent_dependencies
