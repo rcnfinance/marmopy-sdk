@@ -10,11 +10,11 @@ from marmopy.utils import (
 )
 from eth_utils import is_address
 from time import time
-from provider import global_provider
-from constants import wallet_abi
+from .provider import global_provider
+from .constants import wallet_abi
 from web3 import Web3
 from web3.exceptions import BadFunctionCallOutput
-from utils import decode_receipt_event
+from .utils import decode_receipt_event, from_bytes, to_bytes
 from web3.contract import Contract as Web3Contract
 import json
 
@@ -87,14 +87,14 @@ class Intent(object):
                 ]
             }
 
-            to = self.intent_dependencies[0]['address'].replace('0x', '').decode('hex')
+            to = to_bytes(self.intent_dependencies[0]['address'])
             data_signature = function_abi_to_4byte_selector(relayed_at_abi)
-            data_params = Web3Contract._encode_abi(
+            data_params = to_bytes(Web3Contract._encode_abi(
                 relayed_at_abi,
-                [self.intent_dependencies[0]['id'].replace('0x', '').decode('hex')]
-            ).replace('0x', '').decode('hex')
+                [to_bytes(self.intent_dependencies[0]['id'])]
+            ))
 
-            return '0x' + (to + data_signature + data_params).encode('hex')
+            return from_bytes(to + data_signature + data_params)
         else:
             # Multiple dependencies, using DepsUtils contract
             multiple_deps_abi = {
@@ -111,17 +111,16 @@ class Intent(object):
                 ]
             }
 
-            to = config.dependency_utils.replace('0x', '').decode('hex')
+            to = to_bytes(config.dependency_utils)
             data_signature = function_abi_to_4byte_selector(multiple_deps_abi)
-            data_params = Web3Contract._encode_abi(multiple_deps_abi,
+            data_params = to_bytes(Web3Contract._encode_abi(multiple_deps_abi,
                 [
-                    map(lambda x: x["address"].replace('0x', '').decode('hex'), self.intent_dependencies),
-                    map(lambda x: x["id"].replace('0x', '').decode('hex'), self.intent_dependencies)
+                    list(map(lambda x: x["address"], self.intent_dependencies)),
+                    list(map(lambda x: to_bytes(x["id"]), self.intent_dependencies))
                 ]
-            ).replace('0x', '').decode('hex')
+            ))
 
-            return '0x' + (to + data_signature + data_params).encode('hex')
-
+            return from_bytes(to + data_signature + data_params)
 
 class IntentGeneric(Intent):
     def __init__(
@@ -204,11 +203,16 @@ class SignedIntent(object):
             )
 
             event_data = decode_receipt_event(relay_event[0]["data"])
+            
+            if 'tx_hash' in relay_event[0]:
+                tx_hash = relay_event[0]["tx_hash"]
+            else:
+                tx_hash = relay_event[0]["transactionHash"]
 
             return {
                 'code': 'completed',
                 'receipt': {
-                    'tx_hash': relay_event[0]["tx_hash"],
+                    'tx_hash': tx_hash,
                     'relayer': relayer,
                     'block_number': block,
                     'success': event_data["success"]
