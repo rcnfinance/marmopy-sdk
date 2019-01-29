@@ -18,7 +18,7 @@ def keccak256(hexstring):
     return keccak_hash.hexdigest()
 
 def to_hex_string_no_prefix_zero_padded(value, size=64):
-    hexstring = hex(value).replace("0x", "")
+    hexstring = hex(value).replace("0x", "").replace('L', '')
     padding_size = 64 - len(hexstring)
     return "0" * padding_size + hexstring
 
