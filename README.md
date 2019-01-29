@@ -81,9 +81,12 @@ pip install git+https://github.com/ripio/marmopy-sdk
 
 ### Configure SDK
 ```python
-from marmopy import DefaultConf
+from marmopy import DefaultConf, Provider
+
+provider = Provider("https://ropsten.node.rcn.loans:8545/", "http://ec2-18-188-99-203.us-east-2.compute.amazonaws.com/")
 
 DefaultConf.ROPSTEN.as_default()
+provider.as_default()
 ```
 
 ### Create a Marmo wallet
@@ -158,7 +161,7 @@ intent = IntentGeneric(data, token_contract_address, 0)
 ### Sign and relay intent
 ```python
 signedIntent = wallet.sign(intent)
-signedIntent.relay("<Relayer URL>")
+signedIntent.relay()
 ```
 
 # Structure of builder
