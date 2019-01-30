@@ -5,13 +5,13 @@ from marmopy import Action
 import hashlib
 import json
 
-def __generic_intent_init__(self, address):
+def __generic_contract_init__(self, address):
     self.address = address
 
 class Contract(object):
     def __new__(self, abi):
         methods = {
-            "__init__": __generic_intent_init__
+            "__init__": __generic_contract_init__
         }
 
         for interface in json.loads(abi):
@@ -19,5 +19,5 @@ class Contract(object):
                 methods[interface["name"]] = Action(interface)
         
         return type(
-            "GenericIntent-" + hashlib.sha1(abi.encode('utf-8')).hexdigest()[:8], (), methods
+            "GenericContract-" + hashlib.sha1(abi.encode('utf-8')).hexdigest()[:8], (), methods
         )
