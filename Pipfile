@@ -11,6 +11,7 @@ pylint = "<2.0.0"
 marmopy = {path = "."}
 nose = "*"
 enum = "*"
+requests = "*"
 
 [requires]
 python_version = "2.7"
