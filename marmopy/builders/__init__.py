@@ -1,1 +1,1 @@
-from ERC20 import ERC20
+from .ERC20 import ERC20
