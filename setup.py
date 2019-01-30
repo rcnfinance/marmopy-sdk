@@ -25,7 +25,11 @@ setup(
     ],
 
     extras_require={
-        "dev": ["nose"]
+        "dev": [
+            "pylint",
+            "pytest",
+            "tox>=1.8.0"
+        ]
     },
 
     classifiers=[

@@ -1,83 +1,40 @@
 version: 2
+
+tox: &tox
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - run:
+        name: install tox
+        command: pip install --user tox
+    - run:
+        name: run tox
+        command: ~/.local/bin/tox -r
+
 jobs:
-  dependencies-python-2:
+  python27-unit:
+    <<: *tox
     docker:
       - image: circleci/python:2.7
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - pip2-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
-            - pip2-packages-v4-{{ .Branch }}-
-            - pip2-packages-v4-
-      - run: pip install ".[dev]" --user
-      - save_cache:
-          paths:
-            - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip2-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
-      - run: pip list
-
-  test-python-2:
-    working_directory: ~/repo
+    environment:
+      TOXENV: py27-unit
+  python36-unit:
+    <<: *tox
     docker:
-      - image: circleci/python:2.7
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - pip2-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
-            - pip2-packages-v4-{{ .Branch }}-
-            - pip2-packages-v4-
-      - run: python --version
-      - run: nosetests tests/*
-
-  dependencies-python-3:
+      - image: circleci/python:3.6
+    environment:
+      TOXENV: py36-unit
+  python37-unit:
+    <<: *tox
     docker:
-      - image: circleci/python:3.6.4
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
-            - pip-packages-v4-{{ .Branch }}-
-            - pip-packages-v4-
-      - run: pip install ".[dev]" --user
-      - save_cache:
-          paths:
-            - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
-      - run: pip list
+      - image: circleci/python:3.7
+    environment:
+      TOXENV: py37-unit
 
-  test-python-3:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/python:3.6.4
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
-            - pip-packages-v4-{{ .Branch }}-
-            - pip-packages-v4-
-      - run: python --version
-      - run: nosetests tests/*
-            
-            
 workflows:
   version: 2
-  build-test:
+  test:
     jobs:
-      - dependencies-python-2
-      - dependencies-python-3
-      - test-python-2:
-          requires:
-            - dependencies-python-2
-      - test-python-3:
-          requires:
-            - dependencies-python-3
+      - python27-unit
+      - python36-unit
+      - python37-unit
