@@ -1,5 +1,5 @@
 from .intent import Intent, IntentGeneric, SignedIntent
-from .intent_action import IntentAction
+from .intent_action import Action
 from .wallet import Wallet
 from .conf import DefaultConf, Conf, global_conf
 from .provider import Provider, global_provider

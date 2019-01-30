@@ -35,9 +35,9 @@ class Intent(object):
         if not intent_dependencies:
             intent_dependencies = []
 
-        self.to = intent_action.contractAddress
-        self.value = intent_action.value
-        self.data = intent_action.encoded
+        self.to = intent_action["to"]
+        self.value = intent_action["value"]
+        self.data = intent_action["data"]
         self.intent_dependencies = intent_dependencies
         self.salt = salt
         self.max_gas_price = max_gas_price
