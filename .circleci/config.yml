@@ -17,6 +17,7 @@ jobs:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
           key: pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run: pip list
 
   test-python-2:
     working_directory: ~/repo
@@ -49,6 +50,7 @@ jobs:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
           key: pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run: pip list
 
   test-python-3:
     working_directory: ~/repo
