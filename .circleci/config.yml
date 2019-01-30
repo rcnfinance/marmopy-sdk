@@ -1,43 +1,60 @@
 version: 2
-jobs:
-  dependencies:
-    docker:
-      - image: circleci/python:3.6.4
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip-packages-v3-{{ .Branch }}-
-            - pip-packages-v3-
-      - run: pipenv install . --dev
-      - save_cache:
-          paths:
-            - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
-  unit-test:
-    working_directory: ~/repo
+tox: &tox
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - run:
+        name: install tox
+        command: pip install --user tox
+    - run:
+        name: run tox
+        command: ~/.local/bin/tox -r
+
+jobs:
+  python27-unit:
+    <<: *tox
     docker:
-      - image: circleci/python:3.6.4
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip-packages-v3-{{ .Branch }}-
-            - pip-packages-v3-
-      - run: pipenv run nosetests tests/*
-            
-            
+      - image: circleci/python:2.7
+    environment:
+      TOXENV: py27-unit
+  python36-unit:
+    <<: *tox
+    docker:
+      - image: circleci/python:3.6
+    environment:
+      TOXENV: py36-unit
+  python37-unit:
+    <<: *tox
+    docker:
+      - image: circleci/python:3.7
+    environment:
+      TOXENV: py37-unit
+  python27-e2e:
+    <<: *tox
+    docker:
+      - image: circleci/python:2.7
+    environment:
+      TOXENV: py27-e2e
+  python36-e2e:
+    <<: *tox
+    docker:
+      - image: circleci/python:3.6
+    environment:
+      TOXENV: py36-e2e
+  python37-e2e:
+    <<: *tox
+    docker:
+      - image: circleci/python:3.7
+    environment:
+      TOXENV: py37-e2e
 workflows:
   version: 2
-  build-test:
+  test:
     jobs:
-      - dependencies
-      - unit-test:
-          requires:
-            - dependencies
+      - python27-unit
+      - python36-unit
+      - python37-unit
+      - python27-e2e
+      - python36-e2e
+      - python37-e2e

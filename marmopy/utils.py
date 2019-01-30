@@ -9,6 +9,8 @@ from eth_utils import (
 from coincurve.keys import PrivateKey
 from Crypto.Hash import keccak
 
+import sys
+
 def keccak256(hexstring):
     hexstring = remove_0x_prefix(hexstring)
     keccak_hash = keccak.new(digest_bits=256)
@@ -16,31 +18,40 @@ def keccak256(hexstring):
     return keccak_hash.hexdigest()
 
 def to_hex_string_no_prefix_zero_padded(value, size=64):
-    hexstring = hex(value).replace("0x", "")
+    hexstring = hex(value).replace("0x", "").replace('L', '')
     padding_size = 64 - len(hexstring)
     return "0" * padding_size + hexstring
 
+def to_bytes(s):
+    if (sys.version_info > (3, 0)):
+        return bytes.fromhex(s.replace('0x', ''))
+    else:
+        return s.replace('0x', '').decode('hex')
+
+def from_bytes(b):
+    if (sys.version_info > (3, 0)):
+        return '0x' + b.hex()
+    else:
+        return '0x' + b.encode('hex')
+
 def decode_receipt_event(data):
-    data = data.replace("0x", "").decode("hex")
+    data = to_bytes(data)
 
     # Fixed position parameters
     dependencies_start = big_endian_to_int(data[:32])
     relayer = to_normalized_address(data[32:64])
     value = big_endian_to_int(data[64:96])
     data_start = big_endian_to_int(data[96:128])
-    salt = "0x" + data[128:160].encode("hex")
+    salt = from_bytes(data[128:160])
     expiration = big_endian_to_int(data[160:192])
     success = big_endian_to_int(data[192:224]) != 0
 
     # Dynamic position parameters
-    dependencies = []
     dependencies_size = big_endian_to_int(data[dependencies_start:dependencies_start + 32])
-    for i in range(0, dependencies_size / 32):
-        position = dependencies_start + 32 + i * 32
-        dependencies.append(data[position:position + 32].encode("hex"))
+    dependencies = from_bytes(data[dependencies_start + 32:dependencies_start + 32 +dependencies_size])
 
     data_size = big_endian_to_int(data[data_start:data_start + 32])
-    data = "0x" + data[data_start + 32:data_start + 32 + data_size].encode("hex")
+    data = from_bytes(data[data_start + 32:data_start + 32 + data_size])
 
     return {
         "dependencies": dependencies,
