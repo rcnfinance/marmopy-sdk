@@ -22,6 +22,12 @@ class IntentTests(unittest.TestCase):
         intent = Intent(intent_action=intent_action, expiration=1548030494, max_gas_price=10 ** 32)
         self.assertEqual(intent.id(self.wallet), "0xe34f44ab2514803ba5f1a4766f5fe1d6d012a9599c8e13843962366f04427198")
 
+    def test_transfer_named_parameters(self):
+        intent_action = self.erc20.transfer({"to": "0x009ab4de1234c7066197d6ed75743add3576591f", "value": 4})
+
+        intent = Intent(intent_action=intent_action, expiration=1548030494, max_gas_price=10 ** 32)
+        self.assertEqual(intent.id(self.wallet), "0xe34f44ab2514803ba5f1a4766f5fe1d6d012a9599c8e13843962366f04427198")
+
     def test_transfer_eth(self):
         intent_action = ETH.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 1)
 

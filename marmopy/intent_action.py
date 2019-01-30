@@ -34,11 +34,24 @@ class Action(object):
         # TODO: Read output
         # self.abi['outputs'] = [{'name': '', 'type': self.function(instance, args)}]
 
+        if len(args) != 0 and isinstance(args[0], dict):
+            params = self.order_dict_args(args[0])
+        else:
+            params = args
+
         return {
             "to": self.address,
             "value": 0,
-            "data": Contract._encode_abi(self.abi, args, selector).decode()
+            "data": Contract._encode_abi(self.abi, params, selector).decode()
         }
+
+    def order_dict_args(self, args):
+        result = []
+
+        for i in self.abi["inputs"]:
+            result.append(args[i["name"]])
+
+        return result
 
     def __repr__(self):
         return str(self.abi)
