@@ -42,6 +42,8 @@ def test_relay_and_read_status_error():
 
     assert response.status_code == 201
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
+    time.sleep(5)
+
     assert not signed_intent.status()["receipt"]["success"]
     success_intents.append(signed_intent)
 
