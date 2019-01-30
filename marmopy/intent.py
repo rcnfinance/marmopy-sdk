@@ -32,7 +32,7 @@ class Intent(object):
         min_gas_limit = DEFAULT_MIN_GAS_LIMIT,
         expiration = int(time()) + 365 * 86400 # 1 year from now
     ):
-        if not intent_action:
+        if not intent_dependencies:
             intent_dependencies = []
 
         self.to = intent_action.contractAddress

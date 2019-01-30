@@ -1,0 +1,130 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Conf	../marmopy/conf.py	/^class Conf:$/;"	kind:class	line:6
+Contract	../examples/generic_contract.py	/^class Contract(object):$/;"	kind:class	line:6
+ContractTest	../tests/test_intent_action.py	/^            class ContractTest:$/;"	kind:class	line:34
+ContractTest	../tests/test_intent_action.py	/^        class ContractTest:$/;"	kind:class	line:20
+ContractTest	../tests/test_intent_action.py	/^        class ContractTest:$/;"	kind:class	line:8
+Credentials	../marmopy/wallet.py	/^class Credentials:$/;"	kind:class	line:14
+DEFAULT_MAX_GAS_PRICE	../marmopy/intent.py	/^    DEFAULT_MAX_GAS_PRICE = 9999999999$/;"	kind:variable	line:24
+DEFAULT_MIN_GAS_LIMIT	../marmopy/intent.py	/^    DEFAULT_MIN_GAS_LIMIT = 0$/;"	kind:variable	line:23
+DEFAULT_SALT	../marmopy/intent.py	/^    DEFAULT_SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'$/;"	kind:variable	line:22
+DefaultConf	../marmopy/conf.py	/^class DefaultConf:$/;"	kind:class	line:17
+ERC20	../examples/ERC20.py	/^class ERC20:$/;"	kind:class	line:3
+ERC20.py	../examples/ERC20.py	1;"	kind:file	line:1
+Intent	../marmopy/intent.py	/^class Intent(object):$/;"	kind:class	line:21
+IntentAction	../marmopy/intent_action.py	/^class IntentAction(object):$/;"	kind:class	line:6
+IntentGeneric	../marmopy/intent.py	/^class IntentGeneric(Intent):$/;"	kind:class	line:125
+IntentGenericTests	../tests/test_intent_generic.py	/^class IntentGenericTests(unittest.TestCase):$/;"	kind:class	line:6
+IntentTests	../tests/test_intent.py	/^class IntentTests(unittest.TestCase):$/;"	kind:class	line:6
+IntentTests	../tests/test_intent_action.py	/^class IntentTests(unittest.TestCase):$/;"	kind:class	line:5
+Provider	../marmopy/provider.py	/^class Provider:$/;"	kind:class	line:8
+ROPSTEN	../marmopy/conf.py	/^    ROPSTEN = Conf($/;"	kind:variable	line:18
+SignedIntent	../marmopy/intent.py	/^class SignedIntent(object):$/;"	kind:class	line:155
+Wallet	../marmopy/wallet.py	/^class Wallet:$/;"	kind:class	line:40
+__call__	../marmopy/intent_action.py	/^    def __call__(self, instance, *args, **kwargs):$/;"	kind:member	line:29
+__get__	../marmopy/intent_action.py	/^    def __get__(self, instance, obj):$/;"	kind:member	line:25
+__init__	../examples/ERC20.py	/^    def __init__(self,contractAddress):$/;"	kind:member	line:4
+__init__	../examples/generic_contract.py	/^    def __init__(self, abi):$/;"	kind:member	line:8
+__init__	../marmopy/conf.py	/^    def __init__(self, init_code, factory, dependency_utils, network):$/;"	kind:member	line:7
+__init__	../marmopy/intent.py	/^    def __init__($/;"	kind:member	line:126
+__init__	../marmopy/intent.py	/^    def __init__($/;"	kind:member	line:26
+__init__	../marmopy/intent.py	/^    def __init__(self, intent, wallet, signature):$/;"	kind:member	line:156
+__init__	../marmopy/intent_action.py	/^    def __init__(self, function):$/;"	kind:member	line:7
+__init__	../marmopy/provider.py	/^    def __init__(self, web3, relayer):$/;"	kind:member	line:9
+__init__	../marmopy/wallet.py	/^    def __init__(self, private_key):$/;"	kind:member	line:15
+__init__	../marmopy/wallet.py	/^    def __init__(self, private_key, config = None):$/;"	kind:member	line:41
+__init__.py	../examples/__init__.py	1;"	kind:file	line:1
+__init__.py	../marmopy/__init__.py	1;"	kind:file	line:1
+__init__.py	../tests/__init__.py	1;"	kind:file	line:1
+__repr__	../marmopy/intent_action.py	/^    def __repr__(self):$/;"	kind:member	line:45
+_construct	../examples/generic_contract.py	/^    def _construct(self):$/;"	kind:member	line:15
+add_dependency	../marmopy/intent.py	/^    def add_dependency(self, dependency):$/;"	kind:member	line:63
+address	../marmopy/wallet.py	/^    def address(self):$/;"	kind:member	line:22
+address	../marmopy/wallet.py	/^    def address(self):$/;"	kind:member	line:59
+allowance	../examples/ERC20.py	/^    def allowance(self, owner='address', spender='address'): return 'uint256'$/;"	kind:member	line:14
+approve	../examples/ERC20.py	/^    def approve(self, spender='address', value='uint256') : return 'bool'$/;"	kind:member	line:20
+as_default	../marmopy/conf.py	/^    def as_default(self):$/;"	kind:member	line:13
+as_default	../marmopy/provider.py	/^    def as_default(self):$/;"	kind:member	line:19
+author	../setup.py	/^    author='Majed Takieddine',$/;"	kind:variable	line:11
+author_email	../setup.py	/^    author_email='majd_takialddin@hotmail.com',$/;"	kind:variable	line:13
+balanceOf	../examples/ERC20.py	/^    def balanceOf(self, who='address'): return 'uint256'$/;"	kind:member	line:11
+balanceOf	../tests/test_intent_action.py	/^                def balanceOf(self, who):$/;"	kind:member	line:36
+balanceOf	../tests/test_intent_action.py	/^            def balanceOf(self, who='address'):$/;"	kind:member	line:22
+balanceOf	../tests/test_intent_action.py	/^            def balanceOf(self, who='str'):$/;"	kind:member	line:10
+classifiers	../setup.py	/^    classifiers=[$/;"	kind:variable	line:21
+conf.py	../marmopy/conf.py	1;"	kind:file	line:1
+constants.py	../marmopy/constants.py	1;"	kind:file	line:1
+data	../quicksetup.py	/^data = Contract(abi).transfer({"_to":to, "_value":0})	$/;"	kind:variable	line:42
+decode_receipt_event	../marmopy/utils.py	/^def decode_receipt_event(data):$/;"	kind:function	line:37
+description	../setup.py	/^    description='Marmo wallet Python SDK',$/;"	kind:variable	line:9
+encode	../examples/generic_contract.py	/^    def encode(self, args=None, name=""):$/;"	kind:member	line:23
+from_bytes	../marmopy/utils.py	/^def from_bytes(b):$/;"	kind:function	line:31
+generic_contract.py	../examples/generic_contract.py	1;"	kind:file	line:1
+get_data_from_input	../examples/generic_contract.py	/^    def get_data_from_input(self, abi, params):$/;"	kind:member	line:30
+global_conf	../marmopy/conf.py	/^def global_conf():$/;"	kind:function	line:2
+global_provider	../marmopy/provider.py	/^def global_provider():$/;"	kind:function	line:4
+id	../marmopy/intent.py	/^    def id(self, wallet):$/;"	kind:member	line:49
+intent	../quicksetup.py	/^intent = IntentGeneric(data, token_contract_address, 0)$/;"	kind:variable	line:44
+intent.py	../marmopy/intent.py	1;"	kind:file	line:1
+intent2	../quicksetup.py	/^intent2 = IntentGeneric(data, token_contract_address, 0)$/;"	kind:variable	line:48
+intent_action.py	../marmopy/intent_action.py	1;"	kind:file	line:1
+keccak256	../marmopy/utils.py	/^def keccak256(hexstring):$/;"	kind:function	line:14
+name	../setup.py	/^    name='marmopy',$/;"	kind:variable	line:5
+og_warn	../marmopy/__init__.py	/^og_warn = warnings.warn$/;"	kind:variable	line:9
+packages	../setup.py	/^    packages=find_packages(exclude=('tests',)),$/;"	kind:variable	line:17
+prepare_dependency	../marmopy/intent.py	/^    def prepare_dependency(self, config):$/;"	kind:member	line:72
+provider	../quicksetup.py	/^provider = Provider("https:\/\/ropsten.node.rcn.loans:8545\/", "http:\/\/ec2-18-188-99-203.us-east-2.compute.amazonaws.com\/")$/;"	kind:variable	line:54
+provider.py	../marmopy/provider.py	1;"	kind:file	line:1
+quicksetup.py	../quicksetup.py	1;"	kind:file	line:1
+relay	../marmopy/intent.py	/^    def relay(self, provider = None):$/;"	kind:member	line:219
+setUp	../tests/test_intent.py	/^    def setUp(self):$/;"	kind:member	line:7
+setUp	../tests/test_intent_generic.py	/^    def setUp(self):$/;"	kind:member	line:7
+setup.py	../setup.py	1;"	kind:file	line:1
+sign	../marmopy/wallet.py	/^    def sign(self, intent):$/;"	kind:member	line:65
+sign	../marmopy/wallet.py	/^    def sign(self, message):$/;"	kind:member	line:27
+signedIntent	../quicksetup.py	/^signedIntent = wallet.sign(intent)$/;"	kind:variable	line:46
+signedIntent2	../quicksetup.py	/^signedIntent2 = wallet.sign(intent2)$/;"	kind:variable	line:50
+signer	../marmopy/wallet.py	/^    def signer(self):$/;"	kind:member	line:55
+status	../marmopy/intent.py	/^    def status(self, provider = None):$/;"	kind:member	line:180
+test_balance_of	../tests/test_intent.py	/^    def test_balance_of(self):$/;"	kind:member	line:27
+test_balance_of	../tests/test_intent_generic.py	/^    def test_balance_of(self):$/;"	kind:member	line:33
+test_balance_of_with_custom_expiration	../tests/test_intent.py	/^    def test_balance_of_with_custom_expiration(self):$/;"	kind:member	line:96
+test_balance_of_with_custom_expiration	../tests/test_intent_generic.py	/^    def test_balance_of_with_custom_expiration(self):$/;"	kind:member	line:114
+test_balance_of_with_custom_gas_prices	../tests/test_intent.py	/^    def test_balance_of_with_custom_gas_prices(self):$/;"	kind:member	line:64
+test_balance_of_with_custom_gas_prices	../tests/test_intent_generic.py	/^    def test_balance_of_with_custom_gas_prices(self):$/;"	kind:member	line:78
+test_balance_of_with_custom_salt	../tests/test_intent.py	/^    def test_balance_of_with_custom_salt(self):$/;"	kind:member	line:77
+test_balance_of_with_custom_salt	../tests/test_intent_generic.py	/^    def test_balance_of_with_custom_salt(self):$/;"	kind:member	line:93
+test_balance_of_with_dependencies	../tests/test_intent.py	/^    def test_balance_of_with_dependencies(self):$/;"	kind:member	line:44
+test_balance_of_with_dependencies	../tests/test_intent_generic.py	/^    def test_balance_of_with_dependencies(self):$/;"	kind:member	line:56
+test_balanceoff_with_wallet_generation	../tests/test_intent.py	/^    def test_balanceoff_with_wallet_generation(self):$/;"	kind:member	line:36
+test_balanceoff_with_wallet_generation	../tests/test_intent_generic.py	/^    def test_balanceoff_with_wallet_generation(self):$/;"	kind:member	line:45
+test_intent.py	../tests/test_intent.py	1;"	kind:file	line:1
+test_intent_action.py	../tests/test_intent_action.py	1;"	kind:file	line:1
+test_intent_generic.py	../tests/test_intent_generic.py	1;"	kind:file	line:1
+test_invalid_arguments_types	../tests/test_intent_action.py	/^    def test_invalid_arguments_types(self):$/;"	kind:member	line:19
+test_invalid_data_types	../tests/test_intent_action.py	/^    def test_invalid_data_types(self):$/;"	kind:member	line:7
+test_invalid_syntax	../tests/test_intent_action.py	/^    def test_invalid_syntax(self):$/;"	kind:member	line:31
+test_sign_intent	../tests/test_intent.py	/^    def test_sign_intent(self):$/;"	kind:member	line:114
+test_sign_intent	../tests/test_intent_generic.py	/^    def test_sign_intent(self):$/;"	kind:member	line:134
+test_transfer	../tests/test_intent.py	/^    def test_transfer(self):$/;"	kind:member	line:16
+test_transfer	../tests/test_intent_generic.py	/^    def test_transfer(self):$/;"	kind:member	line:19
+to	../quicksetup.py	/^to = "0xA6693e041aAfE9b9D722338Ca9f8A6e7746d7148"	$/;"	kind:variable	line:41
+to_bytes	../marmopy/utils.py	/^def to_bytes(s):$/;"	kind:function	line:25
+to_hex_string_no_prefix_zero_paddedfrom_bytes	../marmopy/utils.py	/^def to_hex_string_no_prefix_zero_paddedfrom_bytes(value, size=64):$/;"	kind:function	line:20
+to_json	../marmopy/intent.py	/^    def to_json(self):$/;"	kind:member	line:162
+token_contract_address	../quicksetup.py	/^token_contract_address = "0x2f45b6fb2f28a73f110400386da31044b2e953d4" #RCN TOKEN	$/;"	kind:variable	line:40
+totalSupply	../examples/ERC20.py	/^    def totalSupply(self): return 'uint256'$/;"	kind:member	line:8
+transfer	../examples/ERC20.py	/^    def transfer(self, to='address', value='uint256'): return 'bool'$/;"	kind:member	line:17
+transferFrom	../examples/ERC20.py	/^    def transferFrom(self, _from='address', to='address', value='uint256'): return 'bool'/;"	kind:member	line:23
+url	../setup.py	/^    url='https:\/\/github.com\/ripio\/marmopy-sdk',$/;"	kind:variable	line:15
+utils.py	../marmopy/utils.py	1;"	kind:file	line:1
+utime	../quicksetup.py	/^utime = str(time()).replace(".", "")$/;"	kind:variable	line:10
+version	../setup.py	/^    version="0.1.2",$/;"	kind:variable	line:7
+wallet	../quicksetup.py	/^wallet = Wallet("0x" + ("0" * (64 - len(utime))) + utime)$/;"	kind:variable	line:11
+wallet.py	../marmopy/wallet.py	1;"	kind:file	line:1
+warn	../marmopy/__init__.py	/^def warn(*args, **kwargs):$/;"	kind:function	line:10
