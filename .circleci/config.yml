@@ -12,7 +12,7 @@ jobs:
             - pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip2-packages-v4-{{ .Branch }}-
             - pip2-packages-v4-
-      - run: pipenv install --two . --dev
+      - run: pipenv sync --two --dev
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
@@ -46,7 +46,7 @@ jobs:
             - pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v4-{{ .Branch }}-
             - pip-packages-v4-
-      - run: pipenv install --three . --dev
+      - run: pipenv sync --three --dev
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
