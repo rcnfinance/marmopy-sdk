@@ -30,7 +30,24 @@ jobs:
       - image: circleci/python:3.7
     environment:
       TOXENV: py37-unit
-
+  python27-e2e:
+    <<: *tox
+    docker:
+      - image: circleci/python:2.7
+    environment:
+      TOXENV: py27-e2e
+  python36-e2e:
+    <<: *tox
+    docker:
+      - image: circleci/python:3.6
+    environment:
+      TOXENV: py36-e2e
+  python37-e2e:
+    <<: *tox
+    docker:
+      - image: circleci/python:3.7
+    environment:
+      TOXENV: py37-e2e
 workflows:
   version: 2
   test:
@@ -38,3 +55,6 @@ workflows:
       - python27-unit
       - python36-unit
       - python37-unit
+      - python27-e2e
+      - python36-e2e
+      - python37-e2e
