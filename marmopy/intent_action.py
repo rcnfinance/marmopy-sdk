@@ -2,6 +2,7 @@ from web3.contract import Contract
 from functools import partial
 from eth_utils import function_abi_to_4byte_selector, encode_hex
 
+import copy
 
 class IntentAction(object):
     def __init__(self, function):
@@ -27,20 +28,21 @@ class IntentAction(object):
         return partial(self.__call__, instance)
 
     def __call__(self, instance, *args, **kwargs):
-
         for attr, value in instance.__dict__.items():
             setattr(self, attr, value)
 
         data = encode_hex(function_abi_to_4byte_selector(self.abi))
 
+        action = copy.copy(self)
+
         self.abi['outputs'] = [{'name': '', 'type': self.function(instance, args)}]
 
-        self.encoded = Contract._encode_abi(self.abi, args, data).decode()
-        self.arguments = dict(zip([arg['name'] for arg in self.abi['inputs']], args))
+        action.encoded = Contract._encode_abi(self.abi, args, data).decode()
+        action.arguments = dict(zip([arg['name'] for arg in self.abi['inputs']], args))
 
-        self.value = 0
+        action.value = 0
 
-        return self
+        return action
 
     def __repr__(self):
         return str(self.abi)
