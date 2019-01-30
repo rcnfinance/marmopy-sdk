@@ -9,13 +9,10 @@ pylint = "<2.0.0"
 
 [packages]
 marmopy = {path = "."}
-nose = "*"
-enum = "*"
-requests = "*"
 
 [requires]
-python_version = "2.7"
 web3 = "3.16.5"
 rlp = "0.6.0"
 pycryptodome = "3.7.2"
 coincurve = "11.0.0"
+requests = "*"
