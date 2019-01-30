@@ -10,11 +10,11 @@ from marmopy.utils import (
 )
 from eth_utils import is_address
 from time import time
-from provider import global_provider
-from constants import wallet_abi
+from .provider import global_provider
+from .constants import wallet_abi
 from web3 import Web3
 from web3.exceptions import BadFunctionCallOutput
-from utils import decode_receipt_event
+from .utils import decode_receipt_event, from_bytes, to_bytes
 from web3.contract import Contract as Web3Contract
 import json
 
@@ -26,12 +26,15 @@ class Intent(object):
     def __init__(
         self,
         intent_action,
-        intent_dependencies = [],
+        intent_dependencies = None,
         salt = DEFAULT_SALT,
         max_gas_price = DEFAULT_MAX_GAS_PRICE,
         min_gas_limit = DEFAULT_MIN_GAS_LIMIT,
         expiration = int(time()) + 365 * 86400 # 1 year from now
     ):
+        if not intent_dependencies:
+            intent_dependencies = []
+
         self.to = intent_action.contractAddress
         self.value = intent_action.value
         self.data = intent_action.encoded
@@ -84,14 +87,14 @@ class Intent(object):
                 ]
             }
 
-            to = self.intent_dependencies[0]['address'].replace('0x', '').decode('hex')
+            to = to_bytes(self.intent_dependencies[0]['address'])
             data_signature = function_abi_to_4byte_selector(relayed_at_abi)
-            data_params = Web3Contract._encode_abi(
+            data_params = to_bytes(Web3Contract._encode_abi(
                 relayed_at_abi,
-                [self.intent_dependencies[0]['id'].replace('0x', '').decode('hex')]
-            ).replace('0x', '').decode('hex')
+                [to_bytes(self.intent_dependencies[0]['id'])]
+            ))
 
-            return '0x' + (to + data_signature + data_params).encode('hex')
+            return from_bytes(to + data_signature + data_params)
         else:
             # Multiple dependencies, using DepsUtils contract
             multiple_deps_abi = {
@@ -108,17 +111,16 @@ class Intent(object):
                 ]
             }
 
-            to = config.dependency_utils.replace('0x', '').decode('hex')
+            to = to_bytes(config.dependency_utils)
             data_signature = function_abi_to_4byte_selector(multiple_deps_abi)
-            data_params = Web3Contract._encode_abi(multiple_deps_abi,
+            data_params = to_bytes(Web3Contract._encode_abi(multiple_deps_abi,
                 [
-                    map(lambda x: x["address"].replace('0x', '').decode('hex'), self.intent_dependencies),
-                    map(lambda x: x["id"].replace('0x', '').decode('hex'), self.intent_dependencies)
+                    list(map(lambda x: x["address"], self.intent_dependencies)),
+                    list(map(lambda x: to_bytes(x["id"]), self.intent_dependencies))
                 ]
-            ).replace('0x', '').decode('hex')
+            ))
 
-            return '0x' + (to + data_signature + data_params).encode('hex')
-
+            return from_bytes(to + data_signature + data_params)
 
 class IntentGeneric(Intent):
     def __init__(
@@ -126,12 +128,15 @@ class IntentGeneric(Intent):
             data,
             contract_address,
             value,
-            intent_dependencies=[],
+            intent_dependencies = None,
             salt=Intent.DEFAULT_SALT,
             max_gas_price=Intent.DEFAULT_MAX_GAS_PRICE,
             min_gas_limit=Intent.DEFAULT_MIN_GAS_LIMIT,
             expiration=int(time()) + 365 * 86400
     ):
+        if not intent_dependencies:
+            intent_dependencies = []
+
         self.to = contract_address
         self.value = value
         self.intent_dependencies = intent_dependencies
@@ -198,11 +203,16 @@ class SignedIntent(object):
             )
 
             event_data = decode_receipt_event(relay_event[0]["data"])
+            
+            if 'tx_hash' in relay_event[0]:
+                tx_hash = relay_event[0]["tx_hash"]
+            else:
+                tx_hash = relay_event[0]["transactionHash"]
 
             return {
                 'code': 'completed',
                 'receipt': {
-                    'tx_hash': relay_event[0]["tx_hash"],
+                    'tx_hash': tx_hash,
                     'relayer': relayer,
                     'block_number': block,
                     'success': event_data["success"]

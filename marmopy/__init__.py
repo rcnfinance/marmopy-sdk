@@ -10,7 +10,7 @@ import warnings
 # Disable deprecation warnings
 og_warn = warnings.warn
 def warn(*args, **kwargs):
-    if not isinstance(args[0], DeprecationWarning) and not kwargs["category"] == DeprecationWarning:
+    if not isinstance(args[0], DeprecationWarning) and not kwargs.get("category", None) == DeprecationWarning:
         og_warn(*args, **kwargs)
 
 warnings.warn = warn
