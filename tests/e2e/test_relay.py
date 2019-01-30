@@ -26,7 +26,7 @@ def test_relay_and_read_status_success():
     response = signed_intent.relay()
 
     assert response.status_code == 201
-    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 320)
+    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
     assert signed_intent.status()["receipt"]["success"]
@@ -41,7 +41,7 @@ def test_relay_and_read_status_error():
     response = signed_intent.relay()
 
     assert response.status_code == 201
-    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 320)
+    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     assert not signed_intent.status()["receipt"]["success"]
     success_intents.append(signed_intent)
 
@@ -57,7 +57,7 @@ def test_relay_with_dependency_and_read_status_success():
     response = signed_intent.relay()
 
     assert response.status_code == 201
-    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 320)
+    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
     assert signed_intent.status()["receipt"]["success"]
@@ -77,7 +77,7 @@ def test_relay_with_multiple_dependency_and_read_status_success():
     response = signed_intent.relay()
 
     assert response.status_code == 201
-    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 320)
+    assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
     assert signed_intent.status()["receipt"]["success"]
