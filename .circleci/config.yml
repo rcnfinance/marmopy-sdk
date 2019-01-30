@@ -9,15 +9,15 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip2-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
             - pip2-packages-v4-{{ .Branch }}-
             - pip2-packages-v4-
-      - run: pipenv sync --two --dev
+      - run: pip install ".[dev]" --user
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run: pipenv run pip list
+          key: pip2-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
+      - run: pip list
 
   test-python-2:
     working_directory: ~/repo
@@ -28,11 +28,11 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip2-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
             - pip2-packages-v4-{{ .Branch }}-
             - pip2-packages-v4-
-      - run: pipenv run python --version
-      - run: pipenv run nosetests tests/*
+      - run: python --version
+      - run: nosetests tests/*
 
   dependencies-python-3:
     docker:
@@ -43,15 +43,15 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
             - pip-packages-v4-{{ .Branch }}-
             - pip-packages-v4-
-      - run: pipenv sync --three --dev
+      - run: pip install ".[dev]" --user
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run: pipenv run pip list
+          key: pip-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
+      - run: pip list
 
   test-python-3:
     working_directory: ~/repo
@@ -62,11 +62,11 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v4-{{ .Branch }}-{{ checksum "setup.py" }}
             - pip-packages-v4-{{ .Branch }}-
             - pip-packages-v4-
-      - run: pipenv run python --version
-      - run: pipenv run nosetests tests/*
+      - run: python --version
+      - run: nosetests tests/*
             
             
 workflows:
