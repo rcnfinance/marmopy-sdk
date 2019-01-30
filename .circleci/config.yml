@@ -9,14 +9,14 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip2-packages-v3-{{ .Branch }}-
-            - pip2-packages-v3-
-      - run: pipenv install . --dev
+            - pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip2-packages-v4-{{ .Branch }}-
+            - pip2-packages-v4-
+      - run: pipenv install --two . --dev
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run: pipenv run pip list
 
   test-python-2:
@@ -28,9 +28,10 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip2-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip2-packages-v3-{{ .Branch }}-
-            - pip2-packages-v3-
+            - pip2-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip2-packages-v4-{{ .Branch }}-
+            - pip2-packages-v4-
+      - run: pipenv run python --version
       - run: pipenv run nosetests tests/*
 
   dependencies-python-3:
@@ -42,14 +43,14 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip-packages-v3-{{ .Branch }}-
-            - pip-packages-v3-
-      - run: pipenv install . --dev
+            - pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v4-{{ .Branch }}-
+            - pip-packages-v4-
+      - run: pipenv install --three . --dev
       - save_cache:
           paths:
             - ~/.local/share/virtualenvs  # this path depends on where pipenv creates a virtualenv
-          key: pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run: pipenv run pip list
 
   test-python-3:
@@ -61,9 +62,10 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-packages-v3-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip-packages-v3-{{ .Branch }}-
-            - pip-packages-v3-
+            - pip-packages-v4-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v4-{{ .Branch }}-
+            - pip-packages-v4-
+      - run: pipenv run python --version
       - run: pipenv run nosetests tests/*
             
             

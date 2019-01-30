@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 nose = "*"
-pylint = "<2.0.0"
+marmopy = {path = "."}
 
 [packages]
 marmopy = {path = "."}
