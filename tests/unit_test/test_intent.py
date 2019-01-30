@@ -1,5 +1,5 @@
 import unittest
-from marmopy import ERC20, Intent, Wallet
+from marmopy import ETH, ERC20, Intent, Wallet
 from marmopy import Conf
 
 class IntentTests(unittest.TestCase):
@@ -21,6 +21,12 @@ class IntentTests(unittest.TestCase):
 
         intent = Intent(intent_action=intent_action, expiration=1548030494, max_gas_price=10 ** 32)
         self.assertEqual(intent.id(self.wallet), "0xe34f44ab2514803ba5f1a4766f5fe1d6d012a9599c8e13843962366f04427198")
+
+    def test_transfer_eth(self):
+        intent_action = ETH.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 1)
+
+        intent = Intent(intent_action=intent_action, expiration=10 ** 24, max_gas_price=10 ** 32)
+        self.assertEqual(intent.id(self.wallet), "0xa6daa52099d4083291c39a4beb2579dbfda6d24393c5e49f2549f08e37739b74")
 
     def test_intent_with_dependency(self):
         intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 100 * 10 ** 18)
