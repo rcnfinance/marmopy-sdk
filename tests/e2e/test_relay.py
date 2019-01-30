@@ -1,7 +1,6 @@
 import os
 
-from examples import ERC20
-from marmopy import Provider, DefaultConf, Wallet, Intent, from_bytes
+from marmopy import ERC20, Provider, DefaultConf, Wallet, Intent, from_bytes
 
 from config import ETH_NODE, TEST_ERC20, RELAYER, CallTestContract, TEST_CONTRACT
 from utils import wait_until

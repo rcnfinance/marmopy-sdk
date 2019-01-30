@@ -1,6 +1,5 @@
 import unittest
-from marmopy import Intent, Wallet
-from examples import ERC20
+from marmopy import ERC20, Intent, Wallet
 from marmopy import Conf
 
 class IntentTests(unittest.TestCase):

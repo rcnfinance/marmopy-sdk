@@ -1,6 +1,5 @@
 import unittest
-from marmopy import IntentGeneric, Wallet, Conf, Intent
-from examples import ERC20
+from marmopy import ERC20, IntentGeneric, Wallet, Conf, Intent
 from examples.generic_contract import Contract
 
 
