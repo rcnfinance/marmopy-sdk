@@ -3,6 +3,8 @@ from .intent_action import IntentAction
 from .wallet import Wallet
 from .conf import DefaultConf, Conf, global_conf
 from .provider import Provider, global_provider
+from .utils import to_bytes, from_bytes
+
 import warnings
 
 # Disable deprecation warnings

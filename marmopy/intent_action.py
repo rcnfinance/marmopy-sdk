@@ -35,7 +35,8 @@ class IntentAction(object):
 
         action = copy.copy(self)
 
-        self.abi['outputs'] = [{'name': '', 'type': self.function(instance, args)}]
+        # TODO: Read output
+        # self.abi['outputs'] = [{'name': '', 'type': self.function(instance, args)}]
 
         action.encoded = Contract._encode_abi(self.abi, args, data).decode()
         action.arguments = dict(zip([arg['name'] for arg in self.abi['inputs']], args))
