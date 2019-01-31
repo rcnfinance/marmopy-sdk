@@ -122,36 +122,6 @@ class Intent(object):
 
             return from_bytes(to + data_signature + data_params)
 
-class IntentGeneric(Intent):
-    def __init__(
-            self,
-            data,
-            contract_address,
-            value,
-            intent_dependencies = None,
-            salt=Intent.DEFAULT_SALT,
-            max_gas_price=Intent.DEFAULT_MAX_GAS_PRICE,
-            min_gas_limit=Intent.DEFAULT_MIN_GAS_LIMIT,
-            expiration=int(time()) + 365 * 86400
-    ):
-        if not intent_dependencies:
-            intent_dependencies = []
-
-        self.to = contract_address
-        self.value = value
-        self.intent_dependencies = intent_dependencies
-        self.salt = salt
-        self.max_gas_price = max_gas_price
-        self.min_gas_limit = min_gas_limit
-        self.expiration = expiration
-
-        if isinstance(data, bytes):
-            self.data = data.decode()
-        else:
-            self.data = data
-
-        assert(is_address(self.to))
-
 class SignedIntent(object):
     def __init__(self, intent, wallet, signature):
         self.intent = intent
