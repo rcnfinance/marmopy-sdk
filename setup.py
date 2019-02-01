@@ -4,13 +4,13 @@ from setuptools import find_packages, setup
 setup(
     name='marmopy',
     
-    version="0.1.2",
+    version="0.2.0",
     
     description='Marmo wallet Python SDK',
     
-    author='Majed Takieddine',
+    author='Agustin Aguilar, Joaquin Gonzalez, Majed Takieddine',
     
-    author_email='majd_takialddin@hotmail.com',
+    author_email='agusxrun@gmail.com, jpgonzalezra@gmail.com, majd_takialddin@hotmail.com',
     
     url='https://github.com/ripio/marmopy-sdk',
     
