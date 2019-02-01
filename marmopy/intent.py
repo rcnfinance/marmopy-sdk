@@ -38,11 +38,14 @@ class Intent(object):
         self.to = intent_action["to"]
         self.value = intent_action["value"]
         self.data = intent_action["data"]
-        self.intent_dependencies = intent_dependencies
         self.salt = salt
         self.max_gas_price = max_gas_price
         self.min_gas_limit = min_gas_limit
         self.expiration = expiration
+        self.intent_dependencies = []
+
+        for intent in intent_dependencies:
+            self.add_dependency(intent)
 
         assert(is_address(self.to))
 
