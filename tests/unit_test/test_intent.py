@@ -50,6 +50,21 @@ class IntentTests(unittest.TestCase):
             "0x0f1a91058c267c034e020aa4651b59e4d459ec7314225de3865217bec8bfefdc"
         )
 
+    def test_intent_with_dependency_in_constructor(self):
+        intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 100 * 10 ** 18)
+
+        dependency_signed_intent = self.wallet.sign(Intent(
+            intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 0),
+            expiration = 10 ** 32
+        ))
+
+        intent = Intent(intent_action=intent_action, expiration=10 ** 36, intent_dependencies=[dependency_signed_intent])
+
+        self.assertEqual(
+            intent.id(self.wallet),
+            "0x0f1a91058c267c034e020aa4651b59e4d459ec7314225de3865217bec8bfefdc"
+        )
+
     def test_sign_intent(self):
         intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 100 * 10 ** 18)
 
