@@ -22,6 +22,14 @@ def to_hex_string_no_prefix_zero_padded(value, size=64):
     padding_size = 64 - len(hexstring)
     return "0" * padding_size + hexstring
 
+def to_padded(val, size=64):
+    val = val.replace("0x", "")
+    return "0" * (size - len(val)) + val
+
+def to_bytes_32(val):
+    val = val.replace("0x", "")
+    return val + "0" * (64 - len(val))
+
 def to_bytes(s):
     if (sys.version_info > (3, 0)):
         return bytes.fromhex(s.replace('0x', ''))
@@ -38,27 +46,14 @@ def decode_receipt_event(data):
     data = to_bytes(data)
 
     # Fixed position parameters
-    dependencies_start = big_endian_to_int(data[:32])
-    relayer = to_normalized_address(data[32:64])
-    value = big_endian_to_int(data[64:96])
-    data_start = big_endian_to_int(data[96:128])
-    salt = from_bytes(data[128:160])
-    expiration = big_endian_to_int(data[160:192])
-    success = big_endian_to_int(data[192:224]) != 0
+    success = big_endian_to_int(data[:32]) != 0
+    result_start = big_endian_to_int(data[32:64])
+    result_size = big_endian_to_int(data[result_start:result_start + 32])
 
     # Dynamic position parameters
-    dependencies_size = big_endian_to_int(data[dependencies_start:dependencies_start + 32])
-    dependencies = from_bytes(data[dependencies_start + 32:dependencies_start + 32 +dependencies_size])
-
-    data_size = big_endian_to_int(data[data_start:data_start + 32])
-    data = from_bytes(data[data_start + 32:data_start + 32 + data_size])
+    result = from_bytes(data[result_start + 32:result_start + 32 +result_size])
 
     return {
-        "dependencies": dependencies,
-        "relayer": relayer,
-        "value": value,
-        "data": data,
-        "salt": salt,
-        "expiration": expiration,
-        "success": success
+        "success": success,
+        "result": result
     }
