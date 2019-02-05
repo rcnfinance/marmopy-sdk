@@ -6,6 +6,8 @@ from eth_utils import (
 )
 from marmopy.utils import (
     keccak256,
+    to_padded,
+    to_bytes_32,
     to_hex_string_no_prefix_zero_padded
 )
 from eth_utils import is_address
@@ -50,18 +52,45 @@ class Intent(object):
         assert(is_address(self.to))
 
     def id(self, wallet):
-        encoded_packed_builder = []
-        encoded_packed_builder.append(wallet.address)
-        encoded_packed_builder.append(keccak256(self.prepare_dependency(wallet.config)))
-        encoded_packed_builder.append(remove_0x_prefix(self.to))
-        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.value))
-        encoded_packed_builder.append(keccak256(self.data))
-        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.min_gas_limit))
-        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.max_gas_price))
-        encoded_packed_builder.append(remove_0x_prefix(self.salt))
-        encoded_packed_builder.append(to_hex_string_no_prefix_zero_padded(self.expiration))
-        encoded_packed_builder = "".join(encoded_packed_builder)
-        return "0x" + keccak256(encoded_packed_builder)
+        encode_packed = [
+            wallet.address,
+            remove_0x_prefix(wallet.config.implementation),
+            keccak256(self.prepare_implement_call(wallet.config))
+        ]
+
+        return "0x" + keccak256("".join(encode_packed))
+
+    def prepare_implement_call(self, config):
+        deps = self.prepare_dependency(config)
+
+        deps_len = len(to_bytes(deps))
+        deps_len_padded_dif = 32 - deps_len % 32
+        deps_len_padded_dif = (deps_len_padded_dif, 0)[deps_len_padded_dif == 32]
+        deps_len_padded = deps_len_padded_dif + deps_len
+
+        data_len = len(to_bytes(self.data))
+        data_len_padded_dif = 32 - data_len % 32
+        data_len_padded_dif = (data_len_padded_dif, 0)[data_len_padded_dif == 32]
+
+        implement_call = [
+            "0x",
+            to_hex_string_no_prefix_zero_padded(256),
+            to_padded(self.to),
+            to_hex_string_no_prefix_zero_padded(self.value),
+            to_hex_string_no_prefix_zero_padded(256 + 32 + deps_len_padded),
+            to_hex_string_no_prefix_zero_padded(self.min_gas_limit),
+            to_hex_string_no_prefix_zero_padded(self.max_gas_price),
+            to_hex_string_no_prefix_zero_padded(self.expiration),
+            to_bytes_32(self.salt),
+            to_hex_string_no_prefix_zero_padded(deps_len),
+            remove_0x_prefix(deps),
+            remove_0x_prefix(from_bytes(to_bytes("00") * deps_len_padded_dif)),
+            to_hex_string_no_prefix_zero_padded(data_len),
+            remove_0x_prefix(self.data),
+            remove_0x_prefix(from_bytes(to_bytes("00") * data_len_padded_dif))
+        ]
+        
+        return "".join(implement_call)
 
     def add_dependency(self, dependency):
         if isinstance(dependency, SignedIntent):
@@ -135,19 +164,23 @@ class SignedIntent(object):
     def to_json(self):
         return {
             "id": self.id,
-            "dependency": self.intent.prepare_dependency(self.wallet.config),
             "wallet": self.wallet.address,
-            "tx": {
-                "to": self.intent.to,
-                "value": self.intent.value,
-                "data": self.intent.data,
-                "maxGasPrice": self.intent.max_gas_price,
-                "minGasLimit": self.intent.min_gas_limit,
-            },
-            "salt": self.intent.salt,
             "signer": self.wallet.signer,
-            "expiration": self.intent.expiration,
-            "signature": self.signature
+            "signature": self.signature,
+            "intent": {
+                "implementation": self.wallet.config.implementation,
+                "data": self.intent.prepare_implement_call(self.wallet.config),
+                "detail": {
+                    "dependency": self.intent.prepare_dependency(self.wallet.config),
+                    "to": self.intent.to,
+                    "value": self.intent.value,
+                    "data": self.intent.data,
+                    "maxGasPrice": self.intent.max_gas_price,
+                    "minGasLimit": self.intent.min_gas_limit,
+                    "salt": self.intent.salt,
+                    "expiration": self.intent.expiration
+                }
+            }
         }
 
     def status(self, provider = None):
@@ -175,12 +208,13 @@ class SignedIntent(object):
                 }],
             )
 
-            event_data = decode_receipt_event(relay_event[0]["data"])
+            # TODO: Search by topic
+            event_data = decode_receipt_event(relay_event[1]["data"])
             
-            if 'tx_hash' in relay_event[0]:
-                tx_hash = relay_event[0]["tx_hash"]
+            if 'tx_hash' in relay_event[1]:
+                tx_hash = relay_event[1]["tx_hash"]
             else:
-                tx_hash = relay_event[0]["transactionHash"]
+                tx_hash = relay_event[1]["transactionHash"]
 
             return {
                 'code': 'completed',
@@ -199,4 +233,4 @@ class SignedIntent(object):
             provider = global_provider()
             assert provider
 
-        return requests.post(provider.relayer + "/relay", json=self.to_json())
+        return requests.post(provider.relayer + "v2/relay", json=self.to_json())
