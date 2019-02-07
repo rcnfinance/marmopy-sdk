@@ -17,9 +17,9 @@ class Conf:
 
 class DefaultConf:
     ROPSTEN = Conf(
-        "0x674bd4d0754e3809fb963174498670c4df41f20f7f1b1470897f5239fa7d2518",
-        "0xceb46ecca6aac8e5dbc7f2e340c77eb86351a2e0",
-        "0x035dfc65c9995e81db28c9ed81326595719a5bfd",
+        "0x14e25af98043632f65f78deb5c4b4cf0c299e2b2e34f034abfde94d138de6a7e",
+        "0x534cbda9c0a9c5c29d0dced0d1d24127e3078519",
+        "0x2101d39973a6a49061934e40f21db638874b39da",
         "0x874ad09c8ab7da34bf75550409e9446b47558364",
         3
     )

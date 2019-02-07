@@ -22,8 +22,8 @@ import json
 
 class Intent(object):
     DEFAULT_SALT = '0x0000000000000000000000000000000000000000000000000000000000000000'
-    DEFAULT_MIN_GAS_LIMIT = 0
-    DEFAULT_MAX_GAS_PRICE = 9999999999
+    DEFAULT_MAX_GAS_LIMIT = 2 ** 256 - 1
+    DEFAULT_MAX_GAS_PRICE = 2 ** 256 - 1
 
     def __init__(
         self,
@@ -31,7 +31,7 @@ class Intent(object):
         intent_dependencies = None,
         salt = DEFAULT_SALT,
         max_gas_price = DEFAULT_MAX_GAS_PRICE,
-        min_gas_limit = DEFAULT_MIN_GAS_LIMIT,
+        max_gas_limit = DEFAULT_MAX_GAS_LIMIT,
         expiration = int(time()) + 365 * 86400 # 1 year from now
     ):
         if not intent_dependencies:
@@ -42,7 +42,7 @@ class Intent(object):
         self.data = intent_action["data"]
         self.salt = salt
         self.max_gas_price = max_gas_price
-        self.min_gas_limit = min_gas_limit
+        self.max_gas_limit = max_gas_limit
         self.expiration = expiration
         self.intent_dependencies = []
 
@@ -78,7 +78,7 @@ class Intent(object):
             to_padded(self.to),
             to_hex_string_no_prefix_zero_padded(self.value),
             to_hex_string_no_prefix_zero_padded(256 + 32 + deps_len_padded),
-            to_hex_string_no_prefix_zero_padded(self.min_gas_limit),
+            to_hex_string_no_prefix_zero_padded(self.max_gas_limit),
             to_hex_string_no_prefix_zero_padded(self.max_gas_price),
             to_hex_string_no_prefix_zero_padded(self.expiration),
             to_bytes_32(self.salt),
@@ -176,7 +176,7 @@ class SignedIntent(object):
                     "value": self.intent.value,
                     "data": self.intent.data,
                     "maxGasPrice": self.intent.max_gas_price,
-                    "minGasLimit": self.intent.min_gas_limit,
+                    "maxGasLimit": self.intent.max_gas_limit,
                     "salt": self.intent.salt,
                     "expiration": self.intent.expiration
                 }

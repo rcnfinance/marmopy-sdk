@@ -20,20 +20,20 @@ class IntentTests(unittest.TestCase):
     def test_transfer(self):
         intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 4)
 
-        intent = Intent(intent_action=intent_action, expiration=1549218987, max_gas_price=10 ** 32)
+        intent = Intent(intent_action=intent_action, expiration=1549218987, max_gas_limit=0, max_gas_price=10 ** 32)
 
         self.assertEqual(intent.id(self.wallet), "0x4c8965758ff35849a98a26d322198d65467cbf1205311377ec8d3639217e654b")
 
     def test_transfer_named_parameters(self):
         intent_action = self.erc20.transfer({"to": "0x009ab4de1234c7066197d6ed75743add3576591f", "value": 4})
 
-        intent = Intent(intent_action=intent_action, expiration=1549218987, max_gas_price=10 ** 32)
+        intent = Intent(intent_action=intent_action, expiration=1549218987, max_gas_limit=0, max_gas_price=10 ** 32)
         self.assertEqual(intent.id(self.wallet), "0x4c8965758ff35849a98a26d322198d65467cbf1205311377ec8d3639217e654b")
 
     def test_transfer_eth(self):
         intent_action = ETH.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 1)
 
-        intent = Intent(intent_action=intent_action, expiration=10 ** 24, max_gas_price=10 ** 32, salt="0x111151")
+        intent = Intent(intent_action=intent_action, expiration=10 ** 24, max_gas_price=10 ** 32, max_gas_limit=0, salt="0x111151")
 
         self.assertEqual(intent.id(self.wallet), "0xe5e4e756b52ca2697f56a13bd4039d09885c56e051c54fbeff40076851d8ab76")
 
@@ -42,10 +42,10 @@ class IntentTests(unittest.TestCase):
 
         dependency_signed_intent = self.wallet.sign(Intent(
             intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 0),
-            expiration = 10 ** 32
+            max_gas_limit=0, max_gas_price=9999999999, expiration = 10 ** 32
         ))
 
-        intent = Intent(intent_action=intent_action, expiration=10 ** 36)
+        intent = Intent(intent_action=intent_action, max_gas_limit=0, max_gas_price=9999999999, expiration=10 ** 36)
         intent.add_dependency(dependency_signed_intent)
 
         self.assertEqual(
@@ -58,10 +58,10 @@ class IntentTests(unittest.TestCase):
 
         dependency_signed_intent = self.wallet.sign(Intent(
             intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 0),
-            expiration = 10 ** 32
+            max_gas_limit=0, max_gas_price=9999999999, expiration = 10 ** 32
         ))
 
-        intent = Intent(intent_action=intent_action, expiration=10 ** 36, intent_dependencies=[dependency_signed_intent])
+        intent = Intent(intent_action=intent_action, expiration=10 ** 36, max_gas_limit=0, max_gas_price=9999999999, intent_dependencies=[dependency_signed_intent])
 
         self.assertEqual(
             intent.id(self.wallet),
@@ -71,7 +71,7 @@ class IntentTests(unittest.TestCase):
     def test_sign_intent(self):
         intent_action = self.erc20.transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 100 * 10 ** 18)
 
-        intent = Intent(intent_action=intent_action, expiration=10 ** 36)
+        intent = Intent(intent_action=intent_action, max_gas_limit=0, max_gas_price=9999999999, expiration=10 ** 36)
 
         signed_intent = self.wallet.sign(intent)
         self.assertEqual(signed_intent.signature, {

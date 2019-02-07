@@ -27,7 +27,8 @@ class IntentGenericTests(unittest.TestCase):
         intent = Intent(
             intent_action=intent_action,
             expiration=1548030494,
-            max_gas_price=10 ** 32
+            max_gas_price=10 ** 32,
+            max_gas_limit=0
         )
 
         self.assertEqual(intent.id(self.wallet), "0x47b6c0256967782aafd9b03f042efb7b7bbed07e5bd2f08309ca9d4a17cebb75")
@@ -37,14 +38,18 @@ class IntentGenericTests(unittest.TestCase):
             intent_action = ERC20(
                 "0x6B0F919A5d450Fa5e6283Ff6178dC1FCd195FD2A"
             ).transfer("0x009ab4de1234c7066197d6ed75743add3576591f", 0),
-            expiration = 10 ** 32
+            expiration = 10 ** 32,
+            max_gas_limit=0,
+            max_gas_price=9999999999,
         ))
 
         intent_action = self.ERC20(self.token_address).transfer({"_to": "0x009ab4de1234c7066197d6ed75743add3576591f", "_value": 100 * 10 ** 18})
 
         intent = Intent(
             intent_action=intent_action,
-            expiration=10 ** 36
+            expiration=10 ** 36,
+            max_gas_limit=0,
+            max_gas_price=9999999999,
         )
 
         intent.add_dependency(dependency_signed_intent)
