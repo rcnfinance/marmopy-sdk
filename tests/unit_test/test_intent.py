@@ -1,5 +1,6 @@
 import unittest
-from marmopy import ETH, ERC20, Intent, Wallet
+
+from marmopy import ETH, ERC20, WETH, Intent, Wallet
 from marmopy import Conf
 
 class IntentTests(unittest.TestCase):
@@ -66,6 +67,14 @@ class IntentTests(unittest.TestCase):
         self.assertEqual(
             intent.id(self.wallet),
             "0x69f9e0539c6d1b349ce4c0c899d3a76f1118dc207e724d196bf9fb1c4fc957f3"
+        )
+
+    def test_intent_payable(self):
+        intent_action = WETH("0x6Eb29e4Dffcbe467b755DCBa6fDdfA91F6f747e1").deposit(1)
+        intent = Intent(intent_action=intent_action, expiration=1549218987, max_gas_limit=0, max_gas_price=10 ** 32)
+        self.assertEqual(
+            intent.id(self.wallet),
+            "0x45fe6e30cb8acae1ca41a81420623348d6ee1394da8998c470761c37eea5b528"
         )
 
     def test_sign_intent(self):
