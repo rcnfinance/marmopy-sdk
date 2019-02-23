@@ -1,6 +1,8 @@
 from web3.contract import Contract
 from functools import partial
 from eth_utils import function_abi_to_4byte_selector, encode_hex
+from eth_abi import decode_abi
+from .utils import bytes_decode
 
 class Action(object):
     def __init__(self, function):
@@ -19,6 +21,7 @@ class Action(object):
                 raise TypeError("Missing Argument Types")
 
             self.abi['inputs'] = [{"name": arg, "type": arg_type} for arg, arg_type in zip(args_names, args_types)]
+            self.abi['outputs'] = list(map(lambda x: {'type': x}, function(self).split(',')))
             self.abi['type'] = "function"
 
     def __get__(self, instance, obj):
@@ -28,21 +31,19 @@ class Action(object):
     def __call__(self, instance, *args, **kwargs):
         selector = encode_hex(function_abi_to_4byte_selector(self.abi))
 
-        # TODO: Read output
-        # self.abi['outputs'] = [{'name': '', 'type': self.function(instance, args)}]
-
         if len(args) != 0 and isinstance(args[0], dict):
-            params = self.order_dict_args(args[0])
+            params = self.__order_dict_args(args[0])
         else:
             params = args
 
         return {
             "to": instance.address,
             "value": 0,
-            "data": Contract._encode_abi(self.abi, params, selector).decode()
+            "data": Contract._encode_abi(self.abi, params, selector).decode(),
+            "parent": self
         }
 
-    def order_dict_args(self, args):
+    def __order_dict_args(self, args):
         result = []
 
         for i in self.abi["inputs"]:
@@ -52,3 +53,9 @@ class Action(object):
 
     def __repr__(self):
         return str(self.abi)
+
+    def decode_receipt(self, data):
+        output_types = list(map(lambda x: x['type'], self.abi['outputs']))
+        out = list(decode_abi(output_types, data))
+        out = list(map(lambda x: bytes_decode(x, 'utf-8') if isinstance(x, bytes) else x, out))
+        return out

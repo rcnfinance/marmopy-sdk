@@ -11,4 +11,10 @@ class CallTestContract:
         self.address = address
         
     @Action
-    def fail1(self): return 'bool' # TODO: fail1 should have no return
+    def fail1(self): return '' # TODO: fail1 should have no return
+
+    @Action
+    def call2(self): return 'string'
+
+    @Action
+    def call3(self): return 'address,uint256'

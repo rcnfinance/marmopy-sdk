@@ -57,3 +57,9 @@ def decode_receipt_event(data):
         "success": success,
         "result": result
     }
+
+def bytes_decode(bytes, encoding):
+    if (sys.version_info > (3,0)):
+        return str(bytes, encoding)
+    else:
+        return bytes.decode(encoding)
