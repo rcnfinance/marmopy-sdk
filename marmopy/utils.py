@@ -8,6 +8,7 @@ from eth_utils import (
 
 from coincurve.keys import PrivateKey
 from Crypto.Hash import keccak
+from eth_abi import decode_abi
 
 import sys
 
@@ -63,3 +64,9 @@ def bytes_decode(bytes, encoding):
         return str(bytes, encoding)
     else:
         return bytes.decode(encoding)
+
+def decode_intent_receipt(action, data):
+    output_types = list(map(lambda x: x['type'], action['outputs']))
+    out = list(decode_abi(output_types, data))
+    out = list(map(lambda x: bytes_decode(x, 'utf-8') if isinstance(x, bytes) else x, out))
+    return out

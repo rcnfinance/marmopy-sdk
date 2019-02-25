@@ -1,7 +1,6 @@
 from web3.contract import Contract
 from functools import partial
 from eth_utils import function_abi_to_4byte_selector, encode_hex
-from eth_abi import decode_abi
 from .utils import bytes_decode
 
 class Action(object):
@@ -40,7 +39,10 @@ class Action(object):
             "to": instance.address,
             "value": 0,
             "data": Contract._encode_abi(self.abi, params, selector).decode(),
-            "parent": self
+            "parent": {
+                "inputs": self.abi["inputs"],
+                "outputs": self.abi["outputs"]
+            }
         }
 
     def __order_dict_args(self, args):
@@ -53,9 +55,3 @@ class Action(object):
 
     def __repr__(self):
         return str(self.abi)
-
-    def decode_receipt(self, data):
-        output_types = list(map(lambda x: x['type'], self.abi['outputs']))
-        out = list(decode_abi(output_types, data))
-        out = list(map(lambda x: bytes_decode(x, 'utf-8') if isinstance(x, bytes) else x, out))
-        return out

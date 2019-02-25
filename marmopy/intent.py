@@ -16,7 +16,7 @@ from .provider import global_provider
 from .constants import wallet_abi
 from web3 import Web3
 from web3.exceptions import BadFunctionCallOutput
-from .utils import decode_receipt_event, from_bytes, to_bytes, bytes_decode
+from .utils import decode_receipt_event, from_bytes, to_bytes, bytes_decode, decode_intent_receipt
 from web3.contract import Contract as Web3Contract
 from eth_abi import decode_single
 
@@ -242,7 +242,7 @@ class SignedIntent(object):
     def __build_result(self, action, event):
         try:
             if event['success']:
-                return { 'output': action['parent'].decode_receipt(event['result']) }
+                return { 'output': decode_intent_receipt(action['parent'], event['result']) }
             else:
                 if event['result'][:9] == '0x08c379a':
                     raw = event['result'][74:]
