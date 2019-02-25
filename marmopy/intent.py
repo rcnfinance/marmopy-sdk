@@ -16,8 +16,10 @@ from .provider import global_provider
 from .constants import wallet_abi
 from web3 import Web3
 from web3.exceptions import BadFunctionCallOutput
-from .utils import decode_receipt_event, from_bytes, to_bytes
+from .utils import decode_receipt_event, from_bytes, to_bytes, bytes_decode, decode_intent_receipt
 from web3.contract import Contract as Web3Contract
+from eth_abi import decode_single
+
 import json
 
 class Intent(object):
@@ -37,6 +39,7 @@ class Intent(object):
         if not intent_dependencies:
             intent_dependencies = []
 
+        self.action = intent_action
         self.to = intent_action["to"]
         self.value = intent_action["value"]
         self.data = intent_action["data"]
@@ -222,7 +225,8 @@ class SignedIntent(object):
                     'tx_hash': tx_hash,
                     'relayer': relayer,
                     'block_number': block,
-                    'success': event_data["success"]
+                    'success': event_data['success'],
+                    'result': self.__build_result(self.intent.action, event_data)
                 }
             }
         else:
@@ -234,3 +238,16 @@ class SignedIntent(object):
             assert provider
 
         return requests.post(provider.relayer + "v2/relay", json=self.to_json())
+
+    def __build_result(self, action, event):
+        try:
+            if event['success']:
+                return { 'output': decode_intent_receipt(action['parent'], event['result']) }
+            else:
+                if event['result'][:9] == '0x08c379a':
+                    raw = event['result'][74:]
+                    return { 'error': bytes_decode(decode_single('string', raw), 'utf-8') }
+
+                return { 'error': '__unknown__' }
+        except Exception:
+            return { 'parse_error': 'Unknown result' }

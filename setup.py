@@ -21,6 +21,7 @@ setup(
         "rlp==0.6.0",
         "pycryptodome==3.7.2",
         "coincurve==11.0.0",
+        "eth-abi==0.5.0",
         "requests"
     ],
 
@@ -37,6 +38,5 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
-    ],
-    
+    ],    
 )
