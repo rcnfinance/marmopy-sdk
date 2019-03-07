@@ -3,7 +3,7 @@
 ![Alt marmo.io](https://marmo.io/assets/img/marmo-imago.svg)
 
 ## Description
-Marmo relayer service
+Marmo python sdk
 
 ## Simple Summary
 As of today, Ethereum wallets require ETH funds to pay for Gas every time they send a transaction through the network.
