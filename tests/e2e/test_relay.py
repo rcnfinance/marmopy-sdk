@@ -28,7 +28,7 @@ def test_relay_and_read_status_success():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -44,7 +44,7 @@ def test_relay_and_read_status_error():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -63,7 +63,7 @@ def test_relay_with_dependency_and_read_status_success():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -84,7 +84,7 @@ def test_relay_with_multiple_dependency_and_read_status_success():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -100,7 +100,7 @@ def test_read_receipt():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -116,7 +116,7 @@ def test_read_receipt_abi():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -132,7 +132,7 @@ def test_read_receipt_multiple():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
@@ -149,7 +149,7 @@ def test_read_receipt_multiple_abi():
 
     response = signed_intent.relay()
 
-    assert response.status_code == 201
+    assert response.status_code == 201 or response.status_code == 200
     assert wait_until(lambda: signed_intent.status()["code"] == "completed", 640)
     time.sleep(5)
 
