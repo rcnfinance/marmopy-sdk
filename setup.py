@@ -21,7 +21,7 @@ setup(
         "rlp==0.6.0",
         "pycryptodome==3.7.2",
         "coincurve==11.0.0",
-        "eth-abi==0.5.0",
+        "eth-abi==4.2.0",
         "requests"
     ],
 
