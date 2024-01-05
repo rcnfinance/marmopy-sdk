@@ -19,7 +19,7 @@ setup(
     install_requires=[
         "web3==3.16.5",
         "rlp==0.6.0",
-        "pycryptodome==3.7.2",
+        "pycryptodome==3.19.1",
         "coincurve==11.0.0",
         "eth-abi==0.5.0",
         "requests"
